@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Crear Jugador</title>
+        <link type="text/css" href="../css/style.css" rel="stylesheet"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <style type="text/css">
+            .ui-diagram-element {
+                width:5em; 
+                height:5em;
+                line-height:5em;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
+                border-radius: 5em;
+                border: 1px solid #404a4e;
+                background-color: #404a4e;
+                color: #cccccc;
+            }
+
+            .ui-diagram-element:hover {
+                background-color: #20282b;
+            }
+        </style>
+
+
+    </h:head>
+    <h:body class="fondo" >
+
+        <h:form id="frmBatalla">
+
+            <p:growl id="pnlErroresLogin"/>
+
+            <p:panel id="pnlPrincipal">
+
+                <h1 style="background-color: black">BIENVENIDO ADMINISTRADOR!!!</h1>
+
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="Cantidad de Barcos"/>
+                    <p:outputLabel value="#{controladorBatalla.tiposDeBarcos.sumarCantidadBarcos()}"/>
+                    <p:outputLabel for="lbIdentifi" value="Nombre de Barco"/>
+                    <p:inputText id="lbIdentifi" value="#{controladorBatalla.tipoBarco.nombre}"/>                    
+                    <p:outputLabel for="outNrCasill" value="Numero de Casillas"/>
+                    <p:spinner id="outNrCasill" min="1" max="7" value="#{controladorBatalla.tipoBarco.nroCasillas}"/>    
+                    <p:outputLabel for="outNrBarco" value="Cantidad de Barcos"/>
+                    <p:spinner id="outNrBarco" min="1" max="7" value="#{controladorBatalla.tipoBarco.cantidadJuego}"/>
+                    <p:commandButton value="Guardar" update="@all" action="#{controladorBatalla.guardarBarco()}" ajax="false"/>
+                    <p:commandButton value="Cancelar" 
+                                     update="@all">
+                    </p:commandButton>  
+                </p:panelGrid>
+
+                <p:panelGrid columns="2">
+                    <p:panel header="Arbol Binario de Busqueda">
+                        <p:diagram value="#{controladorBatalla.model}" style="height:600px; width: 600px" styleClass="ui-widget-content" />
+                    </p:panel>
+                    <p:panel header="Datos de Barco">
+                        <p:commandButton value="Datos" action="#{controladorBatalla.barcosEnSistema()}"
+                                         update="pnlPrincipal"/> 
+                        <p:dataTable value="#{controladorBatalla.informacionDeBarcos}"
+                                     var="barcos">
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel value="Nombre"/>
+                                </f:facet>
+                                <p:outputLabel value="#{barcos.nombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel value="Cantidad de Barcos"/>
+                                </f:facet>
+                                <p:outputLabel value="#{barcos.cantidadJuego}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel value="# de casillas"/>
+                                </f:facet>
+                                <p:outputLabel value="#{barcos.nroCasillas}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:panelGrid>
+            </p:panel>
+
+        </h:form>   
+    </h:body>
+</html>
+

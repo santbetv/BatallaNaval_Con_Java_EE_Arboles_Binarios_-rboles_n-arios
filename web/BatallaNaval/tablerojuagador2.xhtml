@@ -1,0 +1,340 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Tablero Jugador2</title>
+        <link type="text/css" href="../css/style.css" rel="stylesheet"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <style type="text/css">
+            .ui-diagram-element {
+                width:5em; 
+                height:5em;
+                line-height:5em;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
+                border-radius: 5em;
+                border: 1px solid #404a4e;
+                background-color: #404a4e;
+                color: #cccccc;
+            }
+
+            .ui-diagram-element:hover {
+                background-color: #20282b;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <p:panel header="Tablero de Posiciones -- Jugador 2">
+            <c:set var = "cantidad" scope = "session" value = "#{controladorBatalla.mostrarTablero()}"/>
+            <c:if test = "${cantidad == 1}">
+                <c:forEach var = "i" begin = "1" end = "10">
+                    <table border="1" bordercolor="Red">
+                        <tr>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                        </tr>
+                    </table>
+                </c:forEach>
+            </c:if>
+
+            <c:if test = "${cantidad == 2}">
+                <c:forEach var = "i" begin = "1" end = "20">
+                    <table border="1" bordercolor="blue">
+                        <tr>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                        </tr>
+                    </table>
+                </c:forEach>
+            </c:if>
+
+            <c:if test = "${cantidad == 3}">
+                <c:forEach var = "i" begin = "1" end = "30">
+                    <table border="1" bordercolor="blue">
+                        <tr>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                        </tr>
+                    </table>
+                </c:forEach>
+            </c:if>
+            <p:panel header="Coordendas En JUEGO" id="pnlCuadricula">
+                <input id="coordsInput" value="#{controladorBatalla.disparosXPosicion}" disabled=" true"/>
+                <script>
+                    function tenerCoordeanadas() {
+                        var coords = document.getElementById('coordsInput').value.split(',');
+                        var x = parseInt(coords[0]) - 1;
+                        var y = parseInt(coords[1]) - 1;
+                        document.getElementsByTagName('tr')[y].getElementsByTagName('td')[x].innerText = 'PUSH';
+                        //alert(document.getElementsByTagName('tr')[y].getElementsByTagName('td')[x].innerText);
+                    }
+                </script>
+            </p:panel>
+        </p:panel>
+
+        <p:panel header="Disparos">
+            <c:set var = "cantidad" scope = "session" value = "#{controladorBatalla.mostrarTablero()}"/>
+            <c:if test = "${cantidad == 1}">
+                <c:forEach var = "i" begin = "1" end = "10">
+                    <table border="1" bordercolor="Red">
+                        <tr>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                        </tr>
+                    </table>
+                </c:forEach>
+            </c:if>
+
+            <c:if test = "${cantidad == 2}">
+                <c:forEach var = "i" begin = "1" end = "20">
+                    <table border="1" bordercolor="blue">
+                        <tr>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                        </tr>
+                    </table>
+                </c:forEach>
+            </c:if>
+
+            <c:if test = "${cantidad == 3}">
+                <c:forEach var = "i" begin = "1" end = "30">
+                    <table border="1" bordercolor="blue">
+                        <tr>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                            <td>AGUA</td>
+                        </tr>
+                    </table>
+                </c:forEach>
+            </c:if>
+            <p:panel header="Coordendas En JUEGO" id="pnlDisparos">
+                <input id="coordsDisparos" value="#{controladorBatalla.disparosEnOnline}" disabled=" true"/>
+                <script>
+                    function tenerCoordeanadasXDisparos() {
+                        var coords = document.getElementById('coordsDisparos').value.split(',');
+                        var x = parseInt(coords[0]) - 1;
+                        var y = parseInt(coords[1]) - 1;
+                        document.getElementsByTagName('tr')[y].getElementsByTagName('td')[x].innerText = 'PUSH';
+                        //alert(document.getElementsByTagName('tr')[y].getElementsByTagName('td')[x].innerText);
+                    }
+                </script>
+            </p:panel>
+        </p:panel>
+
+        <h:form id="frmBatalla">
+
+            <p:growl id="pnlErroresLogin"/>
+
+            <p:panel id="pnlPrincipal">
+
+                <h1 style="background-color: black">BIENVENIDO JUGADOR-2!!!</h1>
+
+                <p:panel>
+                    <h3>INFORMACION DE JUEGO!!</h3>
+                    <p:inputTextarea rows="6" cols="33" value="HOLA BATALLA !!! Pronto en función"/>
+                    <p:commandButton value="Verificar" update="pnlPrincipal" />
+                </p:panel>
+
+                <p:commandButton action="#{controladorBatalla.mostarArbolN()}" update="pnlPrincipal" value="Datos"/>
+                <p:panel id="pnlDiagram" header="Arbol N">
+                    <p:diagram id="diagrama" value="#{controladorBatalla.model2}" style="height:600px" styleClass="ui-widget-content" />
+                </p:panel>
+
+                <p:remoteCommand name="elementClickRight" 
+                                 actionListener="#{controladorBatalla.onClickRight()}"
+                                 >
+                </p:remoteCommand>
+                <script>
+                    $(document).ready(function () {
+                        $('.ui-diagram > .ui-diagram-element').mousedown(function (info) {
+                            if (info.which === 3) {
+                                elementClickRight([{
+                                        name: 'elementId',
+                                        value: info.target.id
+                                    }]);
+                            }
+                        });
+                    });
+                </script>
+
+                <p:contextMenu for="pnlDiagram" id="pnCmVeh" 
+                               targetFilter=".ui-diagram-element" >
+                    <p:menuitem value="Colocar posición"
+                                ajax="false"
+                                icon="ui-icon-gear"
+                                onclick="PF('pnlColocarCoordenadas').show();
+                                        return false;"/>
+                </p:contextMenu>
+
+                <p:dialog id="pnlColocarCoordenadas"
+                          widgetVar="pnlColocarCoordenadas"
+                          header="Agregar las posiciones">
+
+                    <p:panelGrid columns="2">
+
+                        <p:outputLabel value="Columnas"/>
+                        <p:spinner min="1" max="30" value="#{controladorBatalla.columna}"/>
+                        <p:outputLabel value="Filas"/>
+                        <p:spinner min="1" max="30" value="#{controladorBatalla.fila}" />
+                    </p:panelGrid>
+
+                    <p:commandButton process="@parent"
+                                     update="pnlCuadricula,pnlPrincipal,pnlErroresLogin"
+                                     value="Indicar Pos"
+                                     actionListener="#{controladorBatalla.disparar()}"
+                                     oncomplete="PF('pnlColocarCoordenadas').show();"/>
+                    <p:commandButton process="@parent"
+                                     update="pnlCuadricula,pnlPrincipal,pnlErroresLogin"
+                                     value="Adicionar Pos"
+                                     onclick="tenerCoordeanadas()"
+                                     oncomplete="PF('pnlColocarCoordenadas').show();"/>
+                    <p:commandButton process="@parent"
+                                     update="pnlCuadricula,pnlPrincipal,pnlErroresLogin"
+                                     value="COO[]"
+                                     actionListener="#{controladorBatalla.addCoordenadas()}"
+                                     oncomplete="PF('pnlColocarCoordenadas').show();"/>
+                </p:dialog>
+
+                <p:panel header="Datos de Barco">
+                    <p:commandButton value="Datos" action="#{controladorBatalla.barcosEnSistema()}"
+                                     update="pnlPrincipal"/> 
+                    <p:dataTable value="#{controladorBatalla.informacionDeBarcos}"
+                                 var="barcos">
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Nombre"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.nombre}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Cantidad de Barcos"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.cantidadJuego}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="# de casillas"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.nroCasillas}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </p:panel>
+
+        </h:form>
+    </h:body>
+</html>
+

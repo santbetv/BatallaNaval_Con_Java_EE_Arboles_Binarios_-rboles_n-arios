@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>#{bundle.tituloacceso}</title>
+        <link type="text/css" href="../css/style.css" rel="stylesheet"/>
+    </h:head>
+    <h:body class="fondo">
+        <p:growl id="pnlErroresLogin"/>
+        <h:form>
+            <p:panel id="pnlPrincipal" class="recuadroDeAcceso">
+                <p:panel class="logoacceso"/>
+                <p:inputText class="inputacceso" placeholder="Ingrese Usuario" maxlength="20" value="#{controladorBatalla.usuarios}"/>
+                <p:inputText class="inputacceso" placeholder="Ingrese Codigo ID" maxlength="10" value="#{controladorBatalla.codigo}"/>
+                <p:password class="inputacceso" placeholder="Ingrese password" maxlength="10" value="#{controladorBatalla.password}"/>
+                <!--<p:password id="turkishFeedback" 
+                            feedback="true" 
+                            class="inputacceso" 
+                            placeholder="Ingrese password" 
+                            maxlength="10" 
+                            promptLabel="Por favor Ingrese su contraseña." 
+                            weakLabel="Débil"
+                            goodLabel="Nivel intermedio" 
+                            strongLabel="Fuerte" />-->
+                <p:commandButton class="btnvalidar" value="Validar" action="#{controladorBatalla.autenticar()}" update="pnlPrincipal,pnlErroresLogin" ajax="false"/>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
+

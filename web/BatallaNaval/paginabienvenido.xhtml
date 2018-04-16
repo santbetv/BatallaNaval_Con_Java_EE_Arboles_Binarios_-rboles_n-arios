@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>#{bundle.titulo}</title>
+        <link href="https://fonts.googleapis.com/css?family=Coming+Soon" rel="stylesheet"/>
+        <link type="text/css" href="css/style.css" rel="stylesheet" media="screen"/>
+    </h:head>
+    <h:body class="fondo">
+        <h:form>
+            <p:panel class="recuadro">
+                <h1>#{bundle.bienvenida}</h1>
+                <h2>#{bundle.juego}</h2>
+                <p:commandButton class="btnIngresar" value="Ingresar" action="ingresar" ajax="false"/>
+                <p:panel class="logo"/>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
+
