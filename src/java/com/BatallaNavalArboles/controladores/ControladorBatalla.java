@@ -209,26 +209,64 @@ public class ControladorBatalla implements Serializable {
     ///Metodos
     @PostConstruct
     public void ingresoDeDatos() {
-        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("yo", (byte) 0), 0), null);
-//        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("Destructor", (byte) 3), 1), new BarcoPosicionado(new TipoBarco("yo", (byte) 2)));
-//        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("Destructor", (byte) 3), 1), new BarcoPosicionado(new TipoBarco("yo", (byte) 2)));
-//        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("Destructor", (byte) 3), 1), new BarcoPosicionado(new TipoBarco("yo", (byte) 2)));
-//        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("OKI", (byte) 3), 1), new BarcoPosicionado(new TipoBarco("yo", (byte) 2)));
-//        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("TOM", (byte) 3), 1), new BarcoPosicionado(new TipoBarco("OKI", (byte) 2)));
+//        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("yo", (byte) 0), 0), null);
         administrador = new Usuario("admin@hotmail.com", "Colombia12", new Rol((byte) 4040, "ADMIN"));
         jugador1 = new Usuario("jugador1@hotmail.com", "Colombia12", new Rol((byte) 2020, "JUGADOR1"));
         jugador2 = new Usuario("jugador2@hotmail.com", "Colombia12", new Rol((byte) 1010, "JUGADOR2"));
         try {
             tiposDeBarcos.adicionarNodo(new TipoBarco("Fragata", (byte) 5, (byte) 2));
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Acorazado", (byte) 4, (byte) 5));
-//            tiposDeBarcos.adicionarNodo(new TipoBarco("Destructor", (byte) 1, (byte) 2));
-//            tiposDeBarcos.adicionarNodo(new TipoBarco("Submarino", (byte) 2, (byte) 2));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Rompe", (byte) 6, (byte) 3));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Acorazado", (byte) 4, (byte) 3));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Destructor", (byte) 1, (byte) 2));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Submarino", (byte) 2, (byte) 2));
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
         }
+        cargarArbol();
         pintarArbol();
         pintarArbolN();
     }
+
+    //Inicio de adicionar barcosN aparatir del arbolBB
+    public void cargarArbol() {
+        //Algoritmo
+        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("yo", (byte) 0), 0), null);
+        List<BarcoPosicionado> padres = new ArrayList<>();
+        padres.add(tablerojug1.getRaiz().getDato());
+        adicionarPreOrden(tiposDeBarcos.getRaiz(), padres, 0, 0);
+//            System.out.println("Cantidad: " + contAbb.getArbol().getCantidadNodos());PRUEBASS
+    }
+
+    private void adicionarPreOrden(NodoABB reco, List<BarcoPosicionado> padres, int contizq, int contder) {
+        if (reco != null) {
+            //listaInfantes.add(reco.getDato());
+            List<BarcoPosicionado> padresNuevos = new ArrayList<>();
+            int contPapas = 0;
+            for (byte i = 0; i < reco.getDato().getCantidadJuego(); i++) {
+                BarcoPosicionado barcoNuevo = new BarcoPosicionado(new TipoBarco(reco.getDato().getNombre(), reco.getDato().getNroCasillas()), reco.getDato().getCodigo());
+//                barcoNuevo.setIdentificador(contizq++);
+                barcoNuevo.getTipoBarco().setCodigo(++contizq);
+
+                if (contPapas >= padres.size()) {
+                    contPapas = 0;
+                }
+                tablerojug1.adicionarNodoxCodigo(barcoNuevo, padres.get(contPapas));
+                padresNuevos.add(barcoNuevo);
+                contPapas++;
+            }
+            //Validar nuevo codigo          
+            contizq = contizq + contder;
+            if (reco.getDerecha() != null) {
+                contder = reco.getDerecha().getDato().getCantidadJuego();
+            }
+            adicionarPreOrden(reco.getIzquierda(), padresNuevos, contizq, contder);
+            if (reco.getIzquierda() != null) {
+                contizq = contizq + reco.getIzquierda().getDato().getCantidadJuego();
+            }
+            adicionarPreOrden(reco.getDerecha(), padresNuevos, contizq, contder);
+        }
+    }
+    //Final de adicionar barcosN aparatir del arbolBB
 
     //Inico de conteo de las nombres
     private List<TipoBarco> informacionDeBarcos;
@@ -245,68 +283,6 @@ public class ControladorBatalla implements Serializable {
         informacionDeBarcos = tiposDeBarcos.recorrerPreOrden();
     }
     //Final de conteo de las nombres
-
-    //Inicio de mostrar barcoN
-    public void mostarArbolN() {
-        List<TipoBarco> lista = tiposDeBarcos.recorrerPreOrden();
-        for (int i = 0; i < lista.size(); i++) {
-            adicionarBarcosN();
-        }
-    }
-
-//    private int con = 0;
-//
-//    public void adicionarBarcosN() {
-//        List<TipoBarco> lista = tiposDeBarcos.recorrerPreOrden();
-//        int conteo = lista.get(con).getCantidadJuego();
-//        String nombre = lista.get(con).getNombre();
-//        byte numeroDeCasillas = lista.get(con).getNroCasillas();
-//        if (con == 0) {
-//            for (int i = 0; i < conteo; i++) {
-//                tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco(nombre, (byte) numeroDeCasillas), 0), new BarcoPosicionado(new TipoBarco("yo", (byte) 2)));
-//            }
-//        } else {
-//            for (int i = 0; i < conteo; i++) {
-//                tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco(nombre, (byte) numeroDeCasillas), 0), new BarcoPosicionado(new TipoBarco(tiposDeBarcos.padre(nombre), (byte) 2)));
-//            }
-//        }
-//        con++;
-//        pintarArbolN();
-//    }
-    //Final de mostrar barcoN
-    public void adicionarBarcosN() {
-        adicionarBarcoNProfe(tiposDeBarcos.getRaiz(), tablerojug1.getRaiz());
-    }
-
-    String nombreDePadre = "";
-
-    private void adicionarBarcoNProfe(NodoABB pivote, NodoN reco) {
-        String nombreDeBarco = "";
-        int cantidadDeBarco = 0;
-        byte cantidadDeCasilla = 0;
-        int contadorDePadre = 0;
-        if (pivote != null) {
-            nombreDeBarco = pivote.getDato().getNombre();
-            cantidadDeBarco = pivote.getDato().getCantidadJuego();
-            cantidadDeCasilla = pivote.getDato().getNroCasillas();
-            if (tablerojug1.getRaiz().getHijos().size() <= 0) {
-                nombreDePadre = nombreDeBarco;
-                for (int i = 0; i < cantidadDeBarco; i++) {
-                    tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco(nombreDePadre, cantidadDeCasilla), 0),
-                            new BarcoPosicionado(new TipoBarco("yo", (byte) 0)));
-                }
-            } else {
-                contadorDePadre = tablerojug1.cantidadDePadres(nombreDePadre);
-                tablerojug1.datosTomados(cantidadDeBarco, contadorDePadre);
-                tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco(nombreDeBarco, cantidadDeCasilla), 0),
-                        new BarcoPosicionado(new TipoBarco(nombreDePadre, (byte) 2)));
-                nombreDePadre = nombreDeBarco;
-            }
-            adicionarBarcoNProfe(pivote.getIzquierda(), reco);
-            adicionarBarcoNProfe(pivote.getDerecha(), reco);
-        }
-        pintarArbolN();
-    }
 
     //Inicio de informacion en barcos
     public void datos() {
@@ -336,11 +312,11 @@ public class ControladorBatalla implements Serializable {
     public void setInformeDeTodosLosbarcos(String informeDeTodosLosbarcos) {
         this.informeDeTodosLosbarcos = informeDeTodosLosbarcos;
     }
-
     //Final de informacion
+
     //Inicio de coordenadas 
     public void addCoordenadas() {
-        tablerojug1.buscarBarcoSeleccionado(barco, columna, fila, posicionDeBarco);
+        tablerojug1.buscarBarcoSeleccionado(Integer.parseInt(barco), columna, fila, posicionDeBarco);
         pintarArbolN();
     }
 
@@ -357,8 +333,9 @@ public class ControladorBatalla implements Serializable {
     public void setDisparosXPosicion(String disparosXPosicion) {
         this.disparosXPosicion = disparosXPosicion;
     }
+    //Final de coordenas
 
-    //Metodo que me ayuda a colocar posiciones en el tablero
+    //Inicio que me ayuda a colocar posiciones en el tablero
     public String disparosXPosicion() {
         String casillas = "";
         Coordenada[] coordenada = new Coordenada[100];
@@ -370,7 +347,6 @@ public class ControladorBatalla implements Serializable {
         return casillas;
     }
 
-    //Final de coordenas
     String disparosEnOnline = "";
 
     public String getDisparosEnOnline() {
@@ -395,20 +371,9 @@ public class ControladorBatalla implements Serializable {
 //        }
         return casillas;
     }
-    //Inicio de disparos
+    //Final que me ayuda a colocar posiciones en el tablero
 
-    //Final de disparos
-//
-//    public String datosArrayBar() {
-//        String datos = "";
-//        BarcoPosicionado v = new BarcoPosicionado();
-//        tablerojug1.getRaiz().getDato().setCoordenadas(coordenadas());
-//        for (int i = 0; i < v.getCoordenadas().length; i++) {
-//            datos += "# de Pos: " + i + " ---> " + v.getCoordenadas()[i].getColumna() + "," + v.getCoordenadas()[i].getFila() + "\n";
-//        }
-//        return datos;
-//    }
-    //Final consultar padre de infante
+    //Inicio de autenticar usuarios
     public String autenticar() {
         if (administrador.getTipoRol().getNombre().toUpperCase().compareTo(usuarios.toUpperCase()) == 0
                 && administrador.getTipoRol().getCodigo() == (byte) codigo && administrador.getPassword().equals(password)) {
@@ -425,7 +390,9 @@ public class ControladorBatalla implements Serializable {
         JsfUtil.addErrorMessage("Usuario no registrado");
         return null;
     }
+    //Final de autenticar usuarios
 
+    //Inicio mostrar tablero
     public int mostrarTablero() {
         int vista = 0;
         if (tiposDeBarcos.sumarCantidadBarcos() <= 9) {
@@ -437,16 +404,20 @@ public class ControladorBatalla implements Serializable {
         }
         return vista;
     }
+    //Final mostrar tablero
 
+    //Inicio de guardar barcoBB por administrador
     public void guardarBarco() {
         try {
             tiposDeBarcos.adicionarNodo(tipoBarco);
             tipoBarco = new TipoBarco();
             pintarArbol();
+            pintarArbolN();
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
         }
     }
+    //Final de guardar barcoBB por administrador
 
     //Inicio de metodotos que pintan el arbol
     private DefaultDiagramModel model;
@@ -489,9 +460,9 @@ public class ControladorBatalla implements Serializable {
     public DefaultDiagramModel getModel() {
         return model;
     }
-
-    //Metodo para pintar ArbolN
-    //Inicio de metodotos que pintan el arbol
+    //Final de metodotos que pintar el arbol
+    //
+    //Inicio de metodotos que pintar el arbolN
     private DefaultDiagramModel model2;//Variable del vista de la grafica
 
     public void pintarArbolN() {
@@ -512,7 +483,7 @@ public class ControladorBatalla implements Serializable {
 
             elementHijo.setX(String.valueOf(x) + "em");
             elementHijo.setY(String.valueOf(y) + "em");
-//            elementHijo.setId(reco.getDato().getTipoBarco().getNombre());
+            elementHijo.setId("" + reco.getDato().getTipoBarco().getCodigo());
 
             if (padre != null) {
                 elementHijo.addEndPoint(new DotEndPoint(EndPointAnchor.TOP));
@@ -523,9 +494,8 @@ public class ControladorBatalla implements Serializable {
             model2.addElement(elementHijo);
 
             for (int i = 0; i < reco.getHijos().size(); i++) {
-                pintarArbolN(reco.getHijos().get(i), model2, elementHijo, x - 5, y + 8);
-                x += 5;
-                y += 1;
+                pintarArbolN(reco.getHijos().get(i), model2, elementHijo, x - 6, y + 6);
+                x += 10;
             }
         }
     }
@@ -542,7 +512,8 @@ public class ControladorBatalla implements Serializable {
         return model2;
     }
 
-    //Metodo para pintar ArbolN
+    //Final Metodo para pintar ArbolN
+    //
     //Inicio de metodo que lee los datos de los barcos 
     public void onClickRight() {
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("elementId");

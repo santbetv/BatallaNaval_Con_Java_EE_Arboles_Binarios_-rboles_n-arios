@@ -12,6 +12,7 @@ public class TipoBarco implements Serializable {
     private String nombre;
     private byte nroCasillas;
     private byte cantidadJuego;
+    private int codigo;
 
     public TipoBarco() {
     }
@@ -25,6 +26,14 @@ public class TipoBarco implements Serializable {
     public TipoBarco(String nombre, byte nroCasillas) {
         this.nombre = nombre;
         this.nroCasillas = nroCasillas;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public String getNombre() {

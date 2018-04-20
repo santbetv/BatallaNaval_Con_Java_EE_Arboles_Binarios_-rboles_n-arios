@@ -23,51 +23,55 @@ public class ArbolN {
         this.raiz = raiz;
     }
 
+    //Inicia metodo de adicionar en arbolN Batalla naval creado por el profesor
     public void adicionarNodo(BarcoPosicionado dato, BarcoPosicionado padre) {
-        NodoN nodo = new NodoN(dato);
         if (raiz == null) {
-            raiz = nodo;
+            raiz = new NodoN(dato);
         } else {
             adicionarNodo(dato, padre, raiz);
-
         }
     }
-
-    int contPadres = 0;
-    int contHijos = 0;
-    int cantidadDeHijosHaIngresar = 0;
-    int cantidadDePadresEncontrados = 0;
 
     private void adicionarNodo(BarcoPosicionado dato, BarcoPosicionado padre, NodoN pivote) {
         if (pivote.getDato().getTipoBarco().getNombre().compareTo(padre.getTipoBarco().getNombre()) == 0) {
             pivote.getHijos().add(new NodoN(dato));
         } else {
-            ArrayList<NodoN> informacionDeBarcos = listarNodosNodos(pivote);
-            if (cantidadDeHijosHaIngresar >= cantidadDePadresEncontrados) {
-                for (; contHijos < informacionDeBarcos.size(); contHijos++) {
-                    adicionarNodo(dato, padre, informacionDeBarcos.get(contHijos));
-                    if (contHijos == cantidadDePadresEncontrados - 1) {
-                        contHijos = -1;
-                    }
-                    contPadres++;
-                    if (contPadres == cantidadDeHijosHaIngresar) {
-                        break;
-                    }
+            for (NodoN hijo : pivote.getHijos()) {
+                adicionarNodo(dato, padre, hijo);
+                if (padre.getTipoBarco().getNombre().compareTo(hijo.getDato().getTipoBarco().getNombre()) == 0) {
+                    break;
                 }
             }
-            contPadres = 0;
-            contHijos = 0;
         }
     }
-    //            for (NodoN hijo : pivote.getHijos()) {
-    //                adicionarNodo(dato, padre, hijo);
-    //            }
 
-    public void datosTomados(int hijo, int padres) {
-        cantidadDeHijosHaIngresar = hijo;
-        cantidadDePadresEncontrados = padres;
+    public void adicionarNodoxCodigo(BarcoPosicionado dato, BarcoPosicionado padre) {
+        if (raiz == null) {
+            raiz = new NodoN(dato);
+
+        } else {
+            adicionarNodoxCodigo(dato, padre, raiz);
+
+        }
+
     }
 
+    private void adicionarNodoxCodigo(BarcoPosicionado dato, BarcoPosicionado padre, NodoN pivote) {
+        if (pivote.getDato().getTipoBarco().getCodigo() == padre.getTipoBarco().getCodigo()) {
+            pivote.getHijos().add(new NodoN(dato));
+        } else {
+            for (NodoN hijo : pivote.getHijos()) {
+                adicionarNodoxCodigo(dato, padre, hijo);
+                if (padre.getTipoBarco().getCodigo() == hijo.getDato().getTipoBarco().getCodigo()) {
+                    break;
+                }
+
+            }
+        }
+    }
+    //Final codigo para adicionar nodos repartidos por codigos
+
+    //Finaliza metodo de adicionar en arbolN Batalla naval creado por el profesor
     public String listarHijosCadena() {
         String info = "";
         ArrayList<String> datos = listarNodos(raiz);
@@ -122,21 +126,40 @@ public class ArbolN {
         return nodosBarcos;
     }
 
-    public void buscarBarcoSeleccionado(String barco, byte c, byte f, int posicion) {
+    public void buscarBarcoSeleccionado(int barco, byte c, byte f, int posicion) {
         buscarBarcoSeleccionado(barco, raiz, c, f, posicion);
     }
 
-    private boolean buscarBarcoSeleccionado(String barco, NodoN reco, byte c, byte f, int posicion) {
-        if (reco.getDato().getTipoBarco().getNombre().compareTo(barco) == 0) {
+    private boolean buscarBarcoSeleccionado(int barco, NodoN reco, byte c, byte f, int posicion) {
+//        System.out.println("PRUEBADEINGRESOBARCOBUSCADO: " + barco);
+        if (reco.getDato().getTipoBarco().getCodigo() == barco) {
             byte casillas = reco.getDato().getTipoBarco().getNroCasillas();
             reco.getDato().setCoordenadas(coordenadas(c, f, casillas, posicion));
         } else {
             for (int i = 0; i < reco.getHijos().size(); i++) {
                 buscarBarcoSeleccionado(barco, reco.getHijos().get(i), c, f, posicion);
-                return true;
+                if (barco == reco.getDato().getTipoBarco().getCodigo()) {
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    private Coordenada[] coordenadas(byte c, byte f, byte casilla, int posicion) {//Nuevo validar
+        int aumentarFila = f - 1;
+        int aumentarColumna = c - 1;
+        Coordenada[] coordenada = new Coordenada[casilla];
+        for (int i = 0; i < coordenada.length; i++) {
+            aumentarFila++;
+            aumentarColumna++;
+            if (posicion == 1) {
+                coordenada[i] = new Coordenada(c, (byte) aumentarFila);
+            } else if (posicion == 2) {
+                coordenada[i] = new Coordenada((byte) aumentarColumna, f);
+            }
+        }
+        return coordenada;
     }
 
 //    private int cont = 0;
@@ -151,22 +174,4 @@ public class ArbolN {
 ////        coordenada[2] = new Coordenada((byte) 7, (byte) 1);
 //        return coordenada;
 //    }
-    private Coordenada[] coordenadas(byte c, byte f, byte casilla, int posicion) {//Nuevo validar
-        int aumentarFila = f - 1;
-        int aumentarColumna = c - 1;
-        Coordenada[] coordenada = new Coordenada[casilla];
-        for (int i = 0; i < coordenada.length; i++) {
-            aumentarFila++;
-            aumentarColumna++;
-            if (posicion == 1) {
-                coordenada[i] = new Coordenada(c, (byte) aumentarFila);
-            } else if (posicion == 2) {
-                coordenada[i] = new Coordenada((byte) aumentarColumna, f);
-            }
-        }
-//        coordenada[0] = new Coordenada((byte) 3, (byte) 2);
-//        coordenada[1] = new Coordenada((byte) 1, (byte) 5);
-//        coordenada[2] = new Coordenada((byte) 7, (byte) 1);
-        return coordenada;
-    }
 }

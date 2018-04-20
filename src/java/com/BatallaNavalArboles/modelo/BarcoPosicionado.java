@@ -29,7 +29,6 @@ public class BarcoPosicionado implements Serializable {
 
     public BarcoPosicionado(TipoBarco tipoBarco, int identificador) {
         this.tipoBarco = tipoBarco;
-        this.identificador = identificador;
     }
 
     public TipoBarco getTipoBarco() {
@@ -77,6 +76,6 @@ public class BarcoPosicionado implements Serializable {
 
     @Override
     public String toString() {
-        return tipoBarco.getNombre() + Arrays.toString(getCoordenadas());
+        return tipoBarco.getCodigo() + Arrays.toString(getCoordenadas());
     }
 }

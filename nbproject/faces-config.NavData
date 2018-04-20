@@ -3,13 +3,11 @@
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
         <Node id="BatallaNaval/tablerojugador1.xhtml" x="427" y="265" zoom="true"/>
-        <Node id="index.xhtml" x="11" y="73" zoom="true"/>
         <Node id="BatallaNaval/paginabienvenido.xhtml" x="479" y="39" zoom="true"/>
         <Node id="BatallaNaval/accesoplataforma.xhtml" x="458" y="133" zoom="true"/>
         <Node id="BatallaNaval/crearjugador.xhtml" x="73" y="269" zoom="true"/>
         <Node id="BatallaNaval/tablerojuagador2.xhtml" x="763" y="266" zoom="true"/>
         <Node id="pruebita.html" x="0" y="8" zoom="true"/>
-        <Node id="jquery.html" x="6" y="40" zoom="true"/>
     </Scope>
     <Scope Scope="All Faces Configurations"/>
 </Scene>
