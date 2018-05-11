@@ -47,7 +47,7 @@ public class Coordenada implements Serializable {
 
     @Override
     public String toString() {
-        return columna + "," + fila + estado;
+        return columna + "." + fila;
     }
 
 }

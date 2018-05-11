@@ -12,8 +12,9 @@ import com.BatallaNavalArboles.modelo.TipoBarco;
 import com.BatallaNavalArboles.modelo.Usuario;
 import com.caracolesdecolores.controlador.util.JsfUtil;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.ApplicationScoped;
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.DefaultDiagramModel;
-import org.primefaces.model.diagram.DiagramModel;
 import org.primefaces.model.diagram.Element;
 import org.primefaces.model.diagram.connector.StraightConnector;
 import org.primefaces.model.diagram.endpoint.DotEndPoint;
@@ -33,7 +33,7 @@ import org.primefaces.model.diagram.endpoint.EndPointAnchor;
  * @author Santiago Betancur Villegas <santiago-betancur at hotmail.com>
  */
 @Named(value = "controladorBatalla")
-@SessionScoped
+@ApplicationScoped
 public class ControladorBatalla implements Serializable {
 
     private Usuario administrador;
@@ -42,8 +42,8 @@ public class ControladorBatalla implements Serializable {
     private int cantBarcos;
     private ArbolN tablerojug1 = new ArbolN();
     private ArbolN tablerojug2 = new ArbolN();
-    private List<Coordenada> disparosjug1;
-    private List<Coordenada> disparosjug2;
+    private List<Coordenada> disparosjug1 = new ArrayList<>();
+    private List<Coordenada> disparosjug2 = new ArrayList<>();
     private ArbolBinarioB tiposDeBarcos = new ArbolBinarioB();
     //Creador por santiagos
 
@@ -56,12 +56,31 @@ public class ControladorBatalla implements Serializable {
     byte disparoColumna = 0;
     byte disparoFila = 0;
     int posicionDeBarco = 0;
+    boolean activarPosicionesJugadorUno = true;
+    boolean activarPosicionesJugadorDos = true;
 
     //Constructor
     public ControladorBatalla() {
+        System.out.println("se inicio un bean de aplication");
     }
 
     //Setter and Getter
+    public boolean isActivarPosicionesJugadorDos() {
+        return activarPosicionesJugadorDos;
+    }
+
+    public void setActivarPosicionesJugadorDos(boolean activarPosicionesJugadorDos) {
+        this.activarPosicionesJugadorDos = activarPosicionesJugadorDos;
+    }
+
+    public boolean isActivarPosicionesJugadorUno() {
+        return activarPosicionesJugadorUno;
+    }
+
+    public void setActivarPosicionesJugadorUno(boolean activarPosicionesJugadorUno) {
+        this.activarPosicionesJugadorUno = activarPosicionesJugadorUno;
+    }
+
     public int getPosicionDeBarco() {
         return posicionDeBarco;
     }
@@ -209,15 +228,14 @@ public class ControladorBatalla implements Serializable {
     ///Metodos
     @PostConstruct
     public void ingresoDeDatos() {
-//        tablerojug1.adicionarNodo(new BarcoPosicionado(new TipoBarco("yo", (byte) 0), 0), null);
         administrador = new Usuario("admin@hotmail.com", "Colombia12", new Rol((byte) 4040, "ADMIN"));
         jugador1 = new Usuario("jugador1@hotmail.com", "Colombia12", new Rol((byte) 2020, "JUGADOR1"));
         jugador2 = new Usuario("jugador2@hotmail.com", "Colombia12", new Rol((byte) 1010, "JUGADOR2"));
         try {
             tiposDeBarcos.adicionarNodo(new TipoBarco("Fragata", (byte) 5, (byte) 2));
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Rompe", (byte) 6, (byte) 3));
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Acorazado", (byte) 4, (byte) 3));
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Destructor", (byte) 1, (byte) 2));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Rompe", (byte) 6, (byte) 2));
+//            tiposDeBarcos.adicionarNodo(new TipoBarco("Acorazado", (byte) 4, (byte) 1));
+//            tiposDeBarcos.adicionarNodo(new TipoBarco("Destructor", (byte) 1, (byte) 2));
             tiposDeBarcos.adicionarNodo(new TipoBarco("Submarino", (byte) 2, (byte) 2));
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
@@ -256,13 +274,11 @@ public class ControladorBatalla implements Serializable {
             }
             //Validar nuevo codigo          
             contizq = contizq + contder;
-            if (reco.getDerecha() != null) {
-                contder = reco.getDerecha().getDato().getCantidadJuego();
-            }
+
             adicionarPreOrden(reco.getIzquierda(), padresNuevos, contizq, contder);
-            if (reco.getIzquierda() != null) {
-                contizq = contizq + reco.getIzquierda().getDato().getCantidadJuego();
-            }
+
+            contizq = contizq + tiposDeBarcos.sumarCantidadBarcos(reco.getIzquierda());
+
             adicionarPreOrden(reco.getDerecha(), padresNuevos, contizq, contder);
         }
     }
@@ -318,61 +334,64 @@ public class ControladorBatalla implements Serializable {
     public void addCoordenadas() {
         tablerojug1.buscarBarcoSeleccionado(Integer.parseInt(barco), columna, fila, posicionDeBarco);
         pintarArbolN();
+        JsfUtil.addSuccessMessage("Se adionaron Coordenadas en barco: " + barco);
+        tablerojug1.datosCoor();
+    }
+
+    public void indicarPosiciones() {
+        adicionarCoordenadas = adicionarPosiciones();
+    }
+
+    public String disparosXPosicion() {
+        String z = "";
+//        String valoresPos[];
+//        String coordenada = Arrays.toString(tablerojug1.agregarCoordenadas());
+//        String iniciarSaltoDeComa = coordenada.replace("[", "").replace("]", "");
+//        valoresPos = iniciarSaltoDeComa.split(",");
+//        for (int i = 0; i < valoresPos.length; i++) {
+//            contarPosBarco++;
+//        }
+        return z;
+    }
+
+    private String adicionarCoordenadas = "";
+
+    public String getAdicionarCoordenadas() {
+        return adicionarCoordenadas;
+    }
+
+    public void setAdicionarCoordenadas(String adicionarCoordenadas) {
+        this.adicionarCoordenadas = adicionarCoordenadas;
+    }
+
+    //Final de coordenas
+    //Inicio que me ayuda a colocar posiciones en el tablero
+    private String adicionarPosiciones() {
+        String coordenada = Arrays.toString(tablerojug1.agregarCoordenadas());
+        return coordenada;
     }
 
     public void disparar() {
-        disparosXPosicion = disparosXPosicion();
+        disparoJugadorUno();
     }
 
-    String disparosXPosicion = "";
-
-    public String getDisparosXPosicion() {
-        return disparosXPosicion;
+    public String disparoJugadorUno() {
+        String disparo = "";
+        disparo = disparoColumna + "," + disparoFila;
+        return disparo;
     }
 
-    public void setDisparosXPosicion(String disparosXPosicion) {
-        this.disparosXPosicion = disparosXPosicion;
-    }
-    //Final de coordenas
+    int prueba = 0;
 
-    //Inicio que me ayuda a colocar posiciones en el tablero
-    public String disparosXPosicion() {
-        String casillas = "";
-        Coordenada[] coordenada = new Coordenada[100];
-        Coordenada datos = new Coordenada(columna, fila);
-        for (int i = 0; i < coordenada.length; i++) {
-            coordenada[i] = datos;
-            casillas = "" + coordenada[i].getColumna() + "," + coordenada[i].getFila();
-        }
-        return casillas;
+    public int getPrueba() {
+        return prueba;
     }
 
-    String disparosEnOnline = "";
-
-    public String getDisparosEnOnline() {
-        return disparosEnOnline;
+    public void setPrueba(int prueba) {
+        this.prueba = prueba;
     }
 
-    public void setDisparosEnOnline(String disparosEnOnline) {
-        this.disparosEnOnline = disparosEnOnline;
-    }
-
-    public void dipararOnline() {
-        disparosEnOnline = "2,2";
-    }
-
-    public String disparosEnJuego() {
-        String casillas = "";
-        Coordenada datosDisparos = new Coordenada(disparoColumna, disparoFila);
-        disparosjug1.add(datosDisparos);
-        casillas = "" + datosDisparos;
-//        for (int i = 0; i < disparosjug1.size(); i++) {
-//            casillas += disparosjug1.get(i).getColumna() + "," + disparosjug1.get(i).getFila();
-//        }
-        return casillas;
-    }
     //Final que me ayuda a colocar posiciones en el tablero
-
     //Inicio de autenticar usuarios
     public String autenticar() {
         if (administrador.getTipoRol().getNombre().toUpperCase().compareTo(usuarios.toUpperCase()) == 0
@@ -381,10 +400,14 @@ public class ControladorBatalla implements Serializable {
         } else if (jugador1.getTipoRol().getNombre().toUpperCase().compareTo(usuarios.toUpperCase()) == 0
                 && jugador1.getTipoRol().getCodigo() == (byte) codigo
                 && jugador1.getPassword().equals(password)) {
+//            activarPosicionesJugadorUno = true;
+//            activarPosicionesJugadorDos = false;
             return "jugador1";
         } else if (jugador2.getTipoRol().getNombre().toUpperCase().compareTo(usuarios.toUpperCase()) == 0
                 && jugador2.getTipoRol().getCodigo() == (byte) codigo
                 && jugador2.getPassword().equals(password)) {
+//            activarPosicionesJugadorDos = true;
+//            activarPosicionesJugadorUno = false;
             return "jugador2";
         }
         JsfUtil.addErrorMessage("Usuario no registrado");
@@ -392,7 +415,7 @@ public class ControladorBatalla implements Serializable {
     }
     //Final de autenticar usuarios
 
-    //Inicio mostrar tablero
+    //Inicio mostrar tablero -----JAVASCRIPT
     public int mostrarTablero() {
         int vista = 0;
         if (tiposDeBarcos.sumarCantidadBarcos() <= 9) {
@@ -496,6 +519,7 @@ public class ControladorBatalla implements Serializable {
             for (int i = 0; i < reco.getHijos().size(); i++) {
                 pintarArbolN(reco.getHijos().get(i), model2, elementHijo, x - 6, y + 6);
                 x += 10;
+                y += 1;
             }
         }
     }
@@ -531,4 +555,79 @@ public class ControladorBatalla implements Serializable {
     public void setBarco(String barco) {
         this.barco = barco;
     }
+
+    //Metodos creados para el tableros Nuevos
+    //Inicio mostrar tablero
+    public int mostrarTableroJava() {
+        int vista = 0;
+        if (tiposDeBarcos.sumarCantidadBarcos() <= 9) {
+            vista = 10;
+        } else if (tiposDeBarcos.sumarCantidadBarcos() > 9 && tiposDeBarcos.sumarCantidadBarcos() <= 20) {
+            vista = 20;
+        } else if (tiposDeBarcos.sumarCantidadBarcos() > 20) {
+            vista = 30;
+        }
+        return vista;
+    }
+    //Final mostrar tablero
+
+    //Inicio verificar disparo j1
+    public boolean verificarDisparoJugadorUno(int columna, int fila) {
+        for (Coordenada disparo : disparosjug1) {
+            if (disparo.getFila() == fila && disparo.getColumna() == columna) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //Final  verificar disparo
+
+    //Inicio de almacenar diaparos j1
+    public void dispararJugadorUno(int columna, int fila) {
+        disparosjug1.add(new Coordenada((byte) columna, (byte) fila));
+    }
+    //Final de almacenar diaparos
+
+    //Inicio verificar disparo j2
+    public boolean verificarDisparoJugadorDos(int columna, int fila) {
+        for (Coordenada disparo : disparosjug2) {
+            if (disparo.getFila() == fila && disparo.getColumna() == columna) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //Final  verificar disparo
+
+    //Inicio de almacenar diaparos j2
+    public void dispararJugadorDos(int columna, int fila) {
+        disparosjug2.add(new Coordenada((byte) columna, (byte) fila));
+    }
+    //Final de almacenar diaparos
+
+    public String pintarBarcos(int columna, int fila) {
+
+        if (validarCoordenada(tablerojug1.getRaiz(), columna, fila)) {
+            if (tablerojug1.buscarNombreDeBarco(Integer.parseInt(barco), tablerojug1.getRaiz()).compareTo("Fragata") == 0) {
+                return "background-image: url(../imagenes/fragata.jpg);";
+            }
+        }
+        return "width: 100px; height: 30px";
+    }
+
+    public boolean validarCoordenada(NodoN reco, int columna, int fila) {
+        if (reco != null) {
+            if (reco.getDato().getTipoBarco().getCodigo() != 0 && reco.getDato().validarCoordenada(columna, fila)) {
+                return true;
+            } else {
+                for (NodoN hijo : reco.getHijos()) {
+                    if (validarCoordenada(hijo, columna, fila)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }

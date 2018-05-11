@@ -67,7 +67,7 @@ public class ArbolBinarioB {
         return sumarCantidadBarcos(raiz);
     }
 
-    private int sumarCantidadBarcos(NodoABB reco) {
+    public int sumarCantidadBarcos(NodoABB reco) {
         int cont = 0;
         if (reco != null) {
             cont += reco.getDato().getCantidadJuego();

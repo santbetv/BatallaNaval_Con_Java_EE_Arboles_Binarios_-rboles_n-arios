@@ -8,7 +8,9 @@ and open the template in the editor.
     <head>
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
+        <link type="text/css" href="css/style.css" rel="stylesheet" media="screen"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <script type="text/javascript">
             function Main(f, c) {
                 miTabla = document.createElement("table");
@@ -23,7 +25,7 @@ and open the template in the editor.
                         td = document.createElement("input");
                         //td.setAttribute("type", "number");
                         // td.setAttribute("max", "10");
-                        td.setAttribute("placeholder", i + "" + j);
+                        td.setAttribute("placeholder", i + "," + j);
                         tr.appendChild(td);
                     }
                     miTabla.appendChild(tr);
@@ -31,10 +33,12 @@ and open the template in the editor.
                 document.body.appendChild(miTabla);
             }
         </script>
+
     </head>
     <body>
         <div>TODO write content</div>
         <button title="button" onclick="Main(5 + 1, 5 + 1)"> Generar tabla</button>
+
         <table>
             <tr>
                 <td>AGUA</td><td>AGUA</td><td>AGUA</td>
@@ -53,9 +57,10 @@ and open the template in the editor.
                 var coords = document.getElementById('coordsInput').value.split(',');
                 var x = parseInt(coords[0]) - 1;
                 var y = parseInt(coords[1]) - 1;
-                document.getElementsByTagName('tr')[y].getElementsByTagName('td')[x].innerText = 0;
+                document.getElementsByTagName('tr')[y].getElementsByTagName('td')[x].innerText = 'TOCADO';
                 alert(document.getElementsByTagName('tr')[y].getElementsByTagName('td')[x].innerText);
             }
         </script>
+
     </body>
 </html>

@@ -21,6 +21,7 @@ public class TipoBarco implements Serializable {
         this.nombre = nombre;
         this.nroCasillas = nroCasillas;
         this.cantidadJuego = cantidadJuego;
+        codigo=0;
     }
 
     public TipoBarco(String nombre, byte nroCasillas) {

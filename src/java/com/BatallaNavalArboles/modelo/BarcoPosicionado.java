@@ -29,6 +29,7 @@ public class BarcoPosicionado implements Serializable {
 
     public BarcoPosicionado(TipoBarco tipoBarco, int identificador) {
         this.tipoBarco = tipoBarco;
+        //this.coordenadas = new Coordenada[tipoBarco.getNroCasillas()];
     }
 
     public TipoBarco getTipoBarco() {
@@ -74,8 +75,19 @@ public class BarcoPosicionado implements Serializable {
     public void validarImpactos() {
     }
 
+    public boolean validarCoordenada(int columna, int fila) {
+        if (coordenadas != null) {
+            for (Coordenada lista : coordenadas) {
+                if (lista.getColumna() == columna && lista.getFila() == fila) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
-        return tipoBarco.getCodigo() + Arrays.toString(getCoordenadas());
+        return tipoBarco.getNombre() + tipoBarco.getCodigo() + Arrays.toString(getCoordenadas());
     }
 }

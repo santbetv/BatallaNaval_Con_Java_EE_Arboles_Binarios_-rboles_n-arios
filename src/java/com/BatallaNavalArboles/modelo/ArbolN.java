@@ -1,6 +1,7 @@
 package com.BatallaNavalArboles.modelo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -126,15 +127,36 @@ public class ArbolN {
         return nodosBarcos;
     }
 
+    Coordenada[] datosCoor;
+
+    public Coordenada[] agregarCoordenadas() {
+        return datosCoor;
+    }
+
+    ArrayList<String> l = new ArrayList<>();
+
+    public String datosCoor() {
+        String info = "";
+        for (int i = 0; i < l.size(); i++) {
+            info += l.get(i).replace("[", "").replace("]", "") + ",";
+        }
+        System.out.println("PRuebadelista: " + info);
+        return info;
+    }
+
     public void buscarBarcoSeleccionado(int barco, byte c, byte f, int posicion) {
         buscarBarcoSeleccionado(barco, raiz, c, f, posicion);
     }
 
     private boolean buscarBarcoSeleccionado(int barco, NodoN reco, byte c, byte f, int posicion) {
-//        System.out.println("PRUEBADEINGRESOBARCOBUSCADO: " + barco);
+        String prueba = "";
         if (reco.getDato().getTipoBarco().getCodigo() == barco) {
             byte casillas = reco.getDato().getTipoBarco().getNroCasillas();
             reco.getDato().setCoordenadas(coordenadas(c, f, casillas, posicion));
+            datosCoor = (coordenadas(c, f, casillas, posicion));
+            prueba = Arrays.toString(datosCoor);
+            l.add(prueba);
+            System.out.println("asignarcoor: " + prueba);
         } else {
             for (int i = 0; i < reco.getHijos().size(); i++) {
                 buscarBarcoSeleccionado(barco, reco.getHijos().get(i), c, f, posicion);
@@ -162,16 +184,22 @@ public class ArbolN {
         return coordenada;
     }
 
-//    private int cont = 0;
-//    private Coordenada[] coordenadas(byte c, byte f, byte casilla) {//Nuevo validar
-//        Coordenada[] coordenada = new Coordenada[casilla];
-//        if (cont < coordenada.length) {
-//            coordenada[cont] = new Coordenada(c, f);
-//        }
-//        cont++;
-////        coordenada[0] = new Coordenada((byte) 3, (byte) 2);
-////        coordenada[1] = new Coordenada((byte) 1, (byte) 5);
-////        coordenada[2] = new Coordenada((byte) 7, (byte) 1);
-//        return coordenada;
-//    }
+    //Metodo creado para identidficar nombre de barco seleccionado
+    private String nombreDeBarco = "";
+
+    public String buscarNombreDeBarco(int barco, NodoN reco) {
+        if (reco.getDato().getTipoBarco().getCodigo() == barco) {
+            nombreDeBarco = reco.getDato().getTipoBarco().getNombre();
+            return nombreDeBarco;
+        } else {
+            for (int i = 0; i < reco.getHijos().size(); i++) {
+                buscarNombreDeBarco(barco, reco.getHijos().get(i));
+                if (barco == reco.getDato().getTipoBarco().getCodigo()) {
+                    nombreDeBarco = reco.getDato().getTipoBarco().getNombre();
+                    return nombreDeBarco;
+                }
+            }
+        }
+        return nombreDeBarco;
+    }
 }
