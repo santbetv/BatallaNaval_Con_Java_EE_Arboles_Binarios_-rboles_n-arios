@@ -25,11 +25,25 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>jugador2</from-outcome>
-            <to-view-id>/BatallaNaval/tablerojugadordos.xhtml</to-view-id>
+            <to-view-id>/BatallaNaval/iniciotablerojugados.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>jugador1</from-outcome>
-            <to-view-id>/BatallaNaval/tablerojugadoruno.xhtml</to-view-id>
+            <to-view-id>/BatallaNaval/iniciotablerojugauno.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/BatallaNaval/iniciotablerojugauno.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>tabju1</from-outcome>
+            <to-view-id>/BatallaNaval/tablerosdisparos.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/BatallaNaval/iniciotablerojugados.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>tabju2</from-outcome>
+            <to-view-id>/BatallaNaval/tablerosdisparos.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

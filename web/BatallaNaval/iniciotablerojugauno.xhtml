@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Tablero Jugador 1</title>
+        <link type="text/css" href="../css/style.css" rel="stylesheet"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <style type="text/css">
+            .ui-diagram-black{
+                visibility: collapse;
+            }
+
+            .ui-diagram-fragata{
+                background-image: url('../imagenes/fragata.jpg');
+                background-size: cover;
+            }
+
+            .ui-diagram-submarino{
+                background-image: url('../imagenes/submarino.png');
+                background-size: cover;
+            }
+
+            .ui-diagram-rompe{
+                background-image: url('../imagenes/rompe.jpg');
+                background-size: cover;
+            }
+
+            .ui-diagram-element {
+                width:10em; 
+                height:3em;
+                line-height:3em;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.9);
+                border-radius: 3em;
+                border: 1px solid #404a4e;
+                color: black;
+            }
+
+            .ui-diagram-element:hover {
+                background-color: red;
+            }
+        </style>
+    </h:head>
+    <h:body class="fondo" >
+
+        <h:form id="frmBatalla">
+
+            <p:growl id="pnlErroresLogin"/>
+
+            <p:panel id="pnlPrincipal" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+
+                <h1 onmouseover="style.color = 'white'" onmouseout="style.color = 'red'" style="background: black">!!!BIENVENIDO JUGADOR-1!!!</h1>
+
+                <p:separator />
+
+                <p:panel header="Disparos -->Jugador 1  -- con un Tablero: #{controladorBatalla.mostrarTableroJava()} X #{controladorBatalla.mostrarTableroJava()}" style="background-color: black; margin: 0 auto; text-align:center; border-radius: 1%;" >
+                    <c:forEach var="fila" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                        <c:forEach var="columna" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                            <p:commandButton value=" " 
+                                             action="#{controladorBatalla.dispararJugadorUno(columna, fila)}"
+                                             style="#{controladorBatalla.pintarDisparosJugadorUno(columna, fila)} width: 100px; height: 30px; border-radius: 30%;" 
+                                             disabled="#{controladorBatalla.verificarDisparoJugadorUno(columna, fila)}" 
+                                             update="pnlPrincipal,pnlErroresLogin"
+                                             >
+                            </p:commandButton>
+                        </c:forEach>
+                        <br/>
+                    </c:forEach>
+                </p:panel>
+
+                <p:separator />
+
+                <p:panel header="Posicionar Barcos -->Jugador 1 -- con un Tablero: #{controladorBatalla.mostrarTableroJava()} X #{controladorBatalla.mostrarTableroJava()}" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+                    <c:forEach var="fila" begin="1" end="#{controladorBatalla.mostrarTableroJava()}" >
+                        <c:forEach var="columna" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                            <p:commandButton value=" "
+                                             disabled="#{controladorBatalla.verificarDisparoJugadorDos(columna, fila)}"
+                                             style="#{controladorBatalla.pintarBarcos(columna, fila)} width: 100px; height: 30px; border-radius: 30%;"
+                                             update="pnlPrincipal,pnlErroresLogin"
+                                             />
+                        </c:forEach>
+                        <br/>
+                    </c:forEach>    
+                </p:panel>
+
+                <p:separator />
+
+                <p:panel id="pnlDiagram" header="Arbol N ---> Barcos Disponible : #{controladorBatalla.tiposDeBarcos.sumarCantidadBarcos()}" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%; width: 600px;">
+                    <p:diagram id="diagrama" value="#{controladorBatalla.model2}" style="height:400px; background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;" styleClass="ui-widget-content"/>
+                </p:panel>
+
+                <p:separator />
+
+                <p:panel header="Se tiene este numero de coordenadas: #{controladorBatalla.coordenadas.size()}" style="height:400px; background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+                    <p:commandButton value="LISTOS" action="#{controladorBatalla.autenticarCoordenadasJuUno()}" update="pnlPrincipal,pnlErroresLogin" ajax="false"/>
+                    <p:panelGrid columns="2">
+                        <p:dataTable value="#{controladorBatalla.nombreDeCoordenadas}" var="nombreCoo">
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel value="Nombre de coordenadas"/>
+                                </f:facet>
+                                <p:outputLabel value="#{nombreCoo}"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:dataTable value="#{controladorBatalla.coordenadas}" var="numCoo">
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel value="Conteo de coordenadas"/>
+                                </f:facet>
+                                <p:outputLabel value="#{numCoo}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panelGrid>
+
+                </p:panel>
+
+
+                <p:remoteCommand name="elementClickRight" 
+                                 actionListener="#{controladorBatalla.onClickRight()}"
+                                 >
+                </p:remoteCommand>
+                <script>
+                    $(document).ready(function () {
+                        $('.ui-diagram > .ui-diagram-element').mousedown(function (info) {
+                            if (info.which === 3) {
+                                elementClickRight([{
+                                        name: 'elementId',
+                                        value: info.target.id
+                                    }]);
+                            }
+                        });
+                    });
+                </script>
+
+                <p:contextMenu for="pnlDiagram" id="pnCmVeh" 
+                               targetFilter=".ui-diagram-element" >
+                    <p:menuitem value="Agregar coordenada"
+                                ajax="false"
+                                icon="ui-icon-circle-plus"
+                                rendered="#{controladorBatalla.desactiAdicionarJuUno}"
+                                onclick="PF('pnlColocarCoordenadas').show();
+                                        return false;"/>
+                    <p:menuitem value="Consultar coordenada"
+                                ajax="false"
+                                icon="ui-icon-circle-zoomout"
+                                onclick="PF('pnlConsultarCoordenada').show();
+                                        return false;"/>
+                </p:contextMenu>
+
+                <p:dialog id="pnlConsultarCoordenada"
+                          widgetVar="pnlConsultarCoordenada"
+                          header="Consultar Coordenadas"
+                          modal="true" 
+                          showEffect="explode" 
+                          hideEffect="bounce" 
+                          resizable="false" 
+                          width="750"
+                          >
+
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Disparo Columnas"/>
+                        <p:spinner min="1" max="30" value="#{controladorBatalla.disparoColumna}"/>
+                        <p:outputLabel value="Disparo Filas"/>
+                        <p:spinner min="1" max="30" value="#{controladorBatalla.disparoFila}"/>
+                    </p:panelGrid>
+
+                    <p:commandButton process="@parent"
+                                     update="pnlPrincipal,pnlErroresLogin"
+                                     value="Consultar Coordenada"
+                                     actionListener="#{controladorBatalla.pruebaDeCoordenadas()}"
+                                     oncomplete="PF('pnlColocarCoordenadas').hide();"/>
+                </p:dialog>
+
+
+                <p:dialog id="pnlColocarCoordenadas"
+                          widgetVar="pnlColocarCoordenadas"
+                          header="Agregar las posiciones"
+                          modal="true" 
+                          showEffect="explode" 
+                          hideEffect="bounce" 
+                          resizable="false" 
+                          width="750"
+                          >
+
+                    <p:panelGrid columns="3">
+
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Columnas"/>
+                            <p:spinner min="1" max="#{controladorBatalla.mostrarTableroJava()}" value="#{controladorBatalla.columna}"/>
+                            <p:outputLabel value="Filas"/>
+                            <p:spinner min="1" max="#{controladorBatalla.mostrarTableroJava()}" value="#{controladorBatalla.fila}" />
+                        </p:panelGrid>
+
+                        <p:selectOneMenu id="pnlSelecciPos" required="true" value="#{controladorBatalla.posicionDeBarco}" style="width: 150px">
+                            <f:selectItem itemValue="0" itemLabel="Indique Posición..." itemEscaped="true"/>
+                            <f:selectItem itemValue="1" itemLabel="Vertical"/>
+                            <f:selectItem itemValue="2" itemLabel="Horizontal" />
+                            <p:ajax update="pnlSelecciPos,pnlErroresLogin" event="change"/>
+                        </p:selectOneMenu>
+                        <p:commandButton process="@parent"
+                                         update="pnlPrincipal,pnlErroresLogin"
+                                         ajax="false"
+                                         value="COO[]"
+                                         actionListener="#{controladorBatalla.addCoordenadas()}"
+                                         oncomplete="PF('pnlColocarCoordenadas').hide();"/>
+                    </p:panelGrid>
+                </p:dialog>
+            </p:panel>
+
+            <p:separator />
+        </h:form>
+    </h:body>
+</html>
+

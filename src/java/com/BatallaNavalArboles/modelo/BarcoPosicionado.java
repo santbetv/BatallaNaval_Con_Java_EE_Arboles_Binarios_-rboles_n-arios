@@ -88,6 +88,7 @@ public class BarcoPosicionado implements Serializable {
 
     @Override
     public String toString() {
-        return tipoBarco.getNombre() + tipoBarco.getCodigo() + Arrays.toString(getCoordenadas());
+//        return tipoBarco.getNombre() + tipoBarco.getCodigo() + Arrays.toString(getCoordenadas());
+        return tipoBarco.getNombre() + tipoBarco.getCodigo();
     }
 }

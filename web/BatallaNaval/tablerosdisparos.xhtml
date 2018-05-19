@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Tableros</title>
+        <link type="text/css" href="../css/style.css" rel="stylesheet"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <style type="text/css">
+            .ui-diagram-element {
+                width:3em; 
+                height:3em;
+                line-height:3em;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.9);
+                border-radius: 3em;
+                border: 1px solid #404a4e;
+                background-color: #404a4e;
+                color: #cccccc;
+            }
+
+            .ui-diagram-element:hover {
+                background-color: red;
+            }
+        </style>
+    </h:head>
+    <h:body class="fondo" >
+
+        <h:form id="frmBatalla">
+
+            <p:growl id="pnlErroresLogin"/>
+            <p:commandButton style="color: red"/>
+            <p:outputLabel value="hola" style="color: white; background-color: red;"/>
+
+            <p:panel id="pnlPrincipal" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+
+                <h1 onmouseover="style.color = 'red'" onmouseout="style.color = 'white'" style="background: black;">!!!BIENVENIDO JUGADOR!!!</h1>
+
+                <p:panel header="Disparos -->Jugador 1  -- con un Tablero: #{controladorBatalla.mostrarTableroJava()} X #{controladorBatalla.mostrarTableroJava()}" style="background-color: black; margin: 0 auto; text-align:center; border-radius: 1%;">
+                    <c:forEach var="fila" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                        <c:forEach var="columna" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                            <p:commandButton value=" " 
+                                             action="#{controladorBatalla.dispararJugadorUno(columna, fila)}"
+                                             style="#{controladorBatalla.pintarDisparosJugadorUno(columna, fila)} width: 100px; height: 30px; border-radius: 30%;"
+                                             disabled="#{controladorBatalla.verificarDisparoJugadorUno(columna, fila)}"
+                                             update="pnlPrincipal,pnlErroresLogin"
+                                             ajax="false"
+                                             />
+                        </c:forEach>
+                        <br/>
+                    </c:forEach>
+                </p:panel>
+
+                <p:separator />
+
+                <p:panel header="Posicionar Barcos -->Jugador 1 -- con un Tablero: #{controladorBatalla.mostrarTableroJava()} X #{controladorBatalla.mostrarTableroJava()}" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+                    <c:forEach var="fila" begin="1" end="#{controladorBatalla.mostrarTableroJava()}" >
+                        <c:forEach var="columna" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                            <p:commandButton value=" "
+                                             disabled="#{controladorBatalla.verificarDisparoJugadorDos(columna, fila)}"
+                                             style="#{controladorBatalla.pintarBarcos(columna, fila)} width: 100px; height: 30px; border-radius: 30%;"
+                                             update="pnlPrincipal,pnlErroresLogin"
+                                             />
+                        </c:forEach>
+                        <br/>
+                    </c:forEach>    
+                </p:panel>
+
+                <p:separator />
+
+                <p:panel header="Disparos -->Jugador 2  -- con un Tablero: #{controladorBatalla.mostrarTableroJava()} X #{controladorBatalla.mostrarTableroJava()}" style="background-color: black; margin: 0 auto; text-align:center; border-radius: 1%;">
+                    <c:forEach var="fila" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                        <c:forEach var="columna" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                            <p:commandButton value=" " 
+                                             action="#{controladorBatalla.dispararJugadorDos(columna, fila)}"
+                                             style="#{controladorBatalla.pintarDisparosJugadorDos(columna, fila)} width: 100px; height: 30px; border-radius: 30%;"
+                                             disabled="#{controladorBatalla.verificarDisparoJugadorDos(columna, fila)}"
+                                             update="pnlPrincipal,pnlErroresLogin"
+                                             ajax="false"
+                                             />
+                        </c:forEach>
+                        <br/>
+                    </c:forEach>
+                </p:panel>
+                
+                <p:separator />
+                
+                <p:panel header="Posicionar Barcos -->Jugador 2 -- con un Tablero: #{controladorBatalla.mostrarTableroJava()} X #{controladorBatalla.mostrarTableroJava()}" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+                    <c:forEach var="fila" begin="1" end="#{controladorBatalla.mostrarTableroJava()}" >
+                        <c:forEach var="columna" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
+                            <p:commandButton value=" "
+                                             disabled="#{controladorBatalla.verificarDisparoJugadorUno(columna, fila)}"
+                                             style="#{controladorBatalla.pintarBarcosJugadorDos(columna, fila)} width: 100px; height: 30px; border-radius: 30%;"
+                                             update="pnlPrincipal,pnlErroresLogin"
+                                             />
+                        </c:forEach>
+                        <br/>
+                    </c:forEach>    
+                </p:panel>
+
+
+
+                <p:separator />
+
+                <p:panel header="Datos de Barco " id="pnlDatosDeBar" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+                    <p:commandButton value="Datos" action="#{controladorBatalla.barcosEnSistema()}"
+                                     update="pnlDatosDeBar"/>
+                    <p:dataTable value="#{controladorBatalla.informacionDeBarcos}"
+                                 var="barcos" class="fondo">
+                        <p:column class="fondo" style="background-color: red; color: white">
+                            <f:facet name="header">
+                                <p:outputLabel value="Nombre"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.nombre}" style="color: red"/>
+                        </p:column>
+                        <p:column class="fondo" style="background-color: green; color: white">
+                            <f:facet name="header">
+                                <p:outputLabel value="Cantidad de Barcos"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.cantidadJuego}" style="color: green"/>
+                        </p:column>
+                        <p:column class="fondo" style="background-color: blue; color: white">
+                            <f:facet name="header">
+                                <p:outputLabel value="# de casillas"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.nroCasillas}" style="color: blue"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
+
