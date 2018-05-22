@@ -46,7 +46,7 @@
             }
         </style>
     </h:head>
-    <h:body class="fondo" >
+    <h:body class="fondo">
 
         <h:form id="frmBatalla">
 
@@ -54,11 +54,12 @@
 
             <p:panel id="pnlPrincipal" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
 
+
                 <h1 onmouseover="style.color = 'white'" onmouseout="style.color = 'red'" style="background: black">!!!BIENVENIDO JUGADOR-1!!!</h1>
 
                 <p:separator />
 
-                <p:panel header="Disparos -->Jugador 1  -- con un Tablero: #{controladorBatalla.mostrarTableroJava()} X #{controladorBatalla.mostrarTableroJava()}" style="background-color: black; margin: 0 auto; text-align:center; border-radius: 1%;" >
+                <p:panel header="Disparos -->Jugador 1  -- con un Tablero: #{controladorBatalla.mostrarTableroJava()} X #{controladorBatalla.mostrarTableroJava()}" style="background-color: black; margin: 0 auto; text-align:center; border-radius: 1%;" rendered="#{controladorBatalla.activarDisparosJugadorUno}">
                     <c:forEach var="fila" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
                         <c:forEach var="columna" begin="1" end="#{controladorBatalla.mostrarTableroJava()}">
                             <p:commandButton value=" " 
@@ -96,6 +97,30 @@
 
                 <p:separator />
 
+                <p:panel header="Datos de Barco " id="pnlDatosDeBar" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+                    <p:dataTable value="#{controladorBatalla.informacionDeBarcos}"
+                                 var="barcos" class="fondo">
+                        <p:column class="fondo" style="background-color: red; color: white">
+                            <f:facet name="header">
+                                <p:outputLabel value="Nombre"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.nombre}" style="color: red"/>
+                        </p:column>
+                        <p:column class="fondo" style="background-color: green; color: white">
+                            <f:facet name="header">
+                                <p:outputLabel value="Cantidad de Barcos"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.cantidadJuego}" style="color: green"/>
+                        </p:column>
+                        <p:column class="fondo" style="background-color: blue; color: white">
+                            <f:facet name="header">
+                                <p:outputLabel value="# de casillas"/>
+                            </f:facet>
+                            <p:outputLabel value="#{barcos.nroCasillas}" style="color: blue"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
                 <p:panel header="Se tiene este numero de coordenadas: #{controladorBatalla.coordenadas.size()}" style="height:400px; background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
                     <p:commandButton value="LISTOS" action="#{controladorBatalla.autenticarCoordenadasJuUno()}" update="pnlPrincipal,pnlErroresLogin" ajax="false"/>
                     <p:panelGrid columns="2">
@@ -118,6 +143,8 @@
                     </p:panelGrid>
 
                 </p:panel>
+
+
 
 
                 <p:remoteCommand name="elementClickRight" 
@@ -188,7 +215,6 @@
                           >
 
                     <p:panelGrid columns="3">
-
                         <p:panelGrid columns="2">
                             <p:outputLabel value="Columnas"/>
                             <p:spinner min="1" max="#{controladorBatalla.mostrarTableroJava()}" value="#{controladorBatalla.columna}"/>
@@ -196,23 +222,23 @@
                             <p:spinner min="1" max="#{controladorBatalla.mostrarTableroJava()}" value="#{controladorBatalla.fila}" />
                         </p:panelGrid>
 
+                        <p:outputLabel for="pnlSelecciPos" value="Posición"/>
                         <p:selectOneMenu id="pnlSelecciPos" required="true" value="#{controladorBatalla.posicionDeBarco}" style="width: 150px">
                             <f:selectItem itemValue="0" itemLabel="Indique Posición..." itemEscaped="true"/>
                             <f:selectItem itemValue="1" itemLabel="Vertical"/>
                             <f:selectItem itemValue="2" itemLabel="Horizontal" />
                             <p:ajax update="pnlSelecciPos,pnlErroresLogin" event="change"/>
                         </p:selectOneMenu>
-                        <p:commandButton process="@parent"
-                                         update="pnlPrincipal,pnlErroresLogin"
-                                         ajax="false"
-                                         value="COO[]"
-                                         actionListener="#{controladorBatalla.addCoordenadas()}"
-                                         oncomplete="PF('pnlColocarCoordenadas').hide();"/>
                     </p:panelGrid>
+                    <p:commandButton process="@parent"
+                                     update="pnlPrincipal,pnlErroresLogin"
+                                     ajax="false"
+                                     value="Agregar"
+                                     actionListener="#{controladorBatalla.addCoordenadas()}"
+                                     oncomplete="PF('pnlColocarCoordenadas').hide();"/>
                 </p:dialog>
             </p:panel>
 
-            <p:separator />
         </h:form>
     </h:body>
 </html>

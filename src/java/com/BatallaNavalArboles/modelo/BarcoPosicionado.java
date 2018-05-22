@@ -86,6 +86,15 @@ public class BarcoPosicionado implements Serializable {
         return false;
     }
 
+    public void limpiarCoordenadas() {
+        if (coordenadas != null) {
+            for (Coordenada lista : coordenadas) {
+                lista.setColumna((byte) 0);
+                lista.setFila((byte) 0);
+            }
+        }
+    }
+
     @Override
     public String toString() {
 //        return tipoBarco.getNombre() + tipoBarco.getCodigo() + Arrays.toString(getCoordenadas());

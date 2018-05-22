@@ -69,11 +69,16 @@ public class ArbolN {
                 if (padre.getTipoBarco().getCodigo() == hijo.getDato().getTipoBarco().getCodigo()) {
                     break;
                 }
-
             }
         }
     }
     //Final codigo para adicionar nodos repartidos por codigos
+
+    public void eliminarCoordenadas() {
+        for (BarcoPosicionado listarNodo : listarNodos()) {
+            listarNodo.setCoordenadas(null);
+        }
+    }
 
     //Inicio de listar nodos
     public List<BarcoPosicionado> listarNodos() {

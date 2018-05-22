@@ -7,22 +7,17 @@
         <title>#{bundle.titulo}</title>
         <link href="https://fonts.googleapis.com/css?family=Coming+Soon" rel="stylesheet"/>
         <link type="text/css" href="css/style.css" rel="stylesheet" media="screen"/>
-        <script src="../javascript/particles.js" type="text/javascript"></script>
-        <script src="../javascript/particulas.js" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0"/>﻿
     </h:head>
     <h:body class="fondo">
-        <div id="particles-js"></div>
         <h:form>
-
-            <p:panel class="recuadro">
+            <p:panel class="recuadro" style="margin: 0 auto; text-align:center; border-radius: 1%;">
                 <h1>#{bundle.bienvenida}</h1>
                 <h2>#{bundle.juego}</h2>
                 <p:commandButton class="btnIngresar" value="Ingresar" action="ingresar" ajax="false"/>
                 <p:panel class="logo"/>
             </p:panel>
-
         </h:form>
-
     </h:body>
 </html>
 

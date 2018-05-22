@@ -6,11 +6,12 @@
     <h:head>
         <title>#{bundle.tituloacceso}</title>
         <link type="text/css" href="../css/style.css" rel="stylesheet"/>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0"/>﻿
     </h:head>
     <h:body class="fondo">
         <p:growl id="pnlErroresLogin"/>
         <h:form>
-            <p:panel id="pnlPrincipal" class="recuadroDeAcceso">
+            <p:panel id="pnlPrincipal" class="recuadroDeAcceso" style="margin: 0 auto; text-align:center; border-radius: 1%;">
                 <p:panel class="logoacceso"/>
                 <p:inputText class="inputacceso" placeholder="Ingrese Usuario" maxlength="20" value="#{controladorBatalla.usuarios}"/>
                 <p:inputText class="inputacceso" placeholder="Ingrese Codigo ID" maxlength="10" value="#{controladorBatalla.codigo}"/>
@@ -24,7 +25,7 @@
                             weakLabel="Débil"
                             goodLabel="Nivel intermedio" 
                             strongLabel="Fuerte" />-->
-                <p:commandButton class="btnvalidar" value="Validar" action="#{controladorBatalla.autenticar()}" update="pnlPrincipal,pnlErroresLogin" ajax="false"/>
+                <p:commandButton value="Validar" action="#{controladorBatalla.autenticar()}" update="pnlPrincipal,pnlErroresLogin" ajax="false" style="height: 50px; width: 265px; margin: 0 auto; text-align:center; border-radius: 10%;"/>
             </p:panel>
         </h:form>
     </h:body>

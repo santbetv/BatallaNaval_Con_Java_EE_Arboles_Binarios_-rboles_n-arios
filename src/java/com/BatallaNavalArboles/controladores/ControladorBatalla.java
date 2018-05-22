@@ -62,6 +62,8 @@ public class ControladorBatalla implements Serializable {
     boolean activarPosicionesJugadorDos = true;
     boolean activarDisparosJugadorUno = false;
     boolean activarDisparosJugadorDos = false;
+    boolean activarPerdidaJugadorUno = false;
+    boolean activarPerdidaJugadorDos = false;
 
     //Constructor
     public ControladorBatalla() {
@@ -69,6 +71,22 @@ public class ControladorBatalla implements Serializable {
     }
 
     //Setter and Getter
+    public boolean isActivarPerdidaJugadorUno() {
+        return activarPerdidaJugadorUno;
+    }
+
+    public void setActivarPerdidaJugadorUno(boolean activarPerdidaJugadorUno) {
+        this.activarPerdidaJugadorUno = activarPerdidaJugadorUno;
+    }
+
+    public boolean isActivarPerdidaJugadorDos() {
+        return activarPerdidaJugadorDos;
+    }
+
+    public void setActivarPerdidaJugadorDos(boolean activarPerdidaJugadorDos) {
+        this.activarPerdidaJugadorDos = activarPerdidaJugadorDos;
+    }
+
     public boolean isActivarDisparosJugadorUno() {
         return activarDisparosJugadorUno;
     }
@@ -276,11 +294,12 @@ public class ControladorBatalla implements Serializable {
         jugador1 = new Usuario("jugador1@hotmail.com", "Colombia12", new Rol((byte) 2020, "JUGADOR1"));
         jugador2 = new Usuario("jugador2@hotmail.com", "Colombia12", new Rol((byte) 1010, "JUGADOR2"));
         try {
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Fragata", (byte) 5, (byte) 2));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Fragata", (byte) 5, (byte) 1));
             tiposDeBarcos.adicionarNodo(new TipoBarco("Rompe", (byte) 6, (byte) 1));
 //            tiposDeBarcos.adicionarNodo(new TipoBarco("Acorazado", (byte) 4, (byte) 1));
 //            tiposDeBarcos.adicionarNodo(new TipoBarco("Destructor", (byte) 1, (byte) 2));
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Submarino", (byte) 7, (byte) 2));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Submarino", (byte) 7, (byte) 1));
+
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
         }
@@ -289,6 +308,7 @@ public class ControladorBatalla implements Serializable {
         pintarArbol();
         pintarArbolN();
         pintarArbolNJugadorDos();
+        barcosEnSistema();
     }
 
     //Inicio de adicionar barcosN aparatir del arbolBB
@@ -419,11 +439,14 @@ public class ControladorBatalla implements Serializable {
             cantidad = mostrarTableroJava();
             if (barco.equals("")) {
             } else {
-                tablerojug1.buscarBarcoSeleccionado(Integer.parseInt(barco), columna, fila, posicionDeBarco, cantidad);
-                pintarArbolN();
-                contarLasCoor();
-                contarLosNombresDeCoor();
-
+                if (posicionDeBarco == 0) {
+                } else {
+                    tablerojug1.buscarBarcoSeleccionado(Integer.parseInt(barco), columna, fila, posicionDeBarco, cantidad);
+                    posicionDeBarco = 0;
+                    pintarArbolN();
+                    contarLasCoor();
+                    contarLosNombresDeCoor();
+                }
             }
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
@@ -436,12 +459,16 @@ public class ControladorBatalla implements Serializable {
             cantidad = mostrarTableroJava();
             if (barco.equals("")) {
             } else {
-                tablerojug2.buscarBarcoSeleccionado(Integer.parseInt(barco), columnaJugadorDos, filaJugadorDos, posicionDeBarcoJugadorDos, cantidad);
-                pintarArbolNJugadorDos();
-                contarLasCoorJugadorDos();
-                contarLosNombresDeCoorJugadorDos();
+                if (posicionDeBarcoJugadorDos == 0) {
+                } else {
+                    tablerojug2.buscarBarcoSeleccionado(Integer.parseInt(barco), columnaJugadorDos, filaJugadorDos, posicionDeBarcoJugadorDos, cantidad);
+                    posicionDeBarcoJugadorDos = 0;
+                    pintarArbolNJugadorDos();
+                    contarLasCoorJugadorDos();
+                    contarLosNombresDeCoorJugadorDos();
+                }
+
             }
-//            JsfUtil.addSuccessMessage("Se adionaron Coordenadas en barco: " + barco);
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
         }
@@ -707,22 +734,12 @@ public class ControladorBatalla implements Serializable {
     //Final mostrar tablero
 
     //Inicio de verificarTurnos
-    public void showMessageJugadorDos() {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "En espera de Turno", "Cargando...");
+    public void showMessageInicioDelJuego() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Inicio del juego", "Primer turno para el jugador uno");
         PrimeFaces.current().dialog().showMessageDynamic(message);
     }
     //Final de verificar turno    
 
-    //Inicio verificar disparo j1
-    public boolean verificarDisparoJugadorUno(int columna, int fila) {
-        for (Coordenada disparo : disparosjug1) {
-            if (disparo.getFila() == fila && disparo.getColumna() == columna) {
-                return true;
-            }
-        }
-        return false;
-    }
-    //Final  verificar disparo
     private List<Coordenada> cordsOcupadas = new ArrayList<>();
 
     private boolean turnoJug1 = true;
@@ -749,6 +766,7 @@ public class ControladorBatalla implements Serializable {
         if (turnoJug1) {
             JsfUtil.addSuccessMessage("Disparo Guardado: " + columna + "." + fila);
             disparosjug1.add(new Coordenada((byte) columna, (byte) fila));
+            mostrarTocadosJuUno(columna, fila);
             cordsOcupadas = tablerojug2.acumCoordenadas();
             int num = 0;
             for (Coordenada coor : cordsOcupadas) {
@@ -758,8 +776,15 @@ public class ControladorBatalla implements Serializable {
                 }
             }
             if (validarGanadorjug1()) {
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "...Ganaste...", "...Campeón...");
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "...GANASTE...", "...Campeón...");
                 PrimeFaces.current().dialog().showMessageDynamic(message);
+                reiniciarJuego();
+                activarDisparosJugadorUno = false;
+                activarDisparosJugadorDos = false;
+                activarPerdidaJugadorDos = true;
+                if (activarPerdidaJugadorDos) {
+                    JsfUtil.addSuccessMessage("...Perdio jugador dos...");
+                }
             }
             if (num < 1) {
                 turnoJug1 = false;
@@ -770,11 +795,65 @@ public class ControladorBatalla implements Serializable {
         } else {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información...", "Aún no te toca, Jugador dos no ha perdido, Sigue intentando");
             PrimeFaces.current().dialog().showMessageDynamic(message);
+        }
+    }
+//Final de almacenar diaparos
+
+    //Inicio de almacenar diaparos j2
+    public void dispararJugadorDos(int columna, int fila) {
+        if (turnoJug2) {
+            JsfUtil.addSuccessMessage("Disparo Guardado: " + columna + "." + fila);
+            disparosjug2.add(new Coordenada((byte) columna, (byte) fila));
+            mostrarTocadosJudos(columna, fila);
+            cordsOcupadas = tablerojug1.acumCoordenadas();
+            int num = 0;
+            for (Coordenada coor : cordsOcupadas) {
+                if (coor.getFila() == fila && coor.getColumna() == columna) {
+                    num++;
+                    pegadosjug2++;
+                }
+            }
+            if (validarGanadorjug2()) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "...Ganaste...", "...Campeón...");
+                PrimeFaces.current().dialog().showMessageDynamic(message);
+                reiniciarJuego();
+                activarDisparosJugadorUno = false;
+                activarDisparosJugadorDos = false;
+                activarPerdidaJugadorUno = true;
+                if (activarPerdidaJugadorUno) {
+                    JsfUtil.addSuccessMessage("...Perdio jugador Uno...");
+                }
+            }
+
+            if (num < 1) {
+                turnoJug1 = true;
+                turnoJug2 = false;
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Fallaste este Turno", "Intenta de nuevo... ");
+                PrimeFaces.current().dialog().showMessageDynamic(message);
+            }
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información...", "Aún no te toca, Jugador uno no ha perdido, Sigue intentando");
+            PrimeFaces.current().dialog().showMessageDynamic(message);
 //            JsfUtil.addErrorMessage("aun no le toca intente de nuevo en un momento");
         }
 
     }
-//Final de almacenar diaparos
+    //Final de almacenar diaparos
+
+    public void reiniciarJuego() {
+        tablerojug1.eliminarCoordenadas();
+        tablerojug2.eliminarCoordenadas();
+        tablerojug1.acumCoordenadas().clear();
+        tablerojug2.acumCoordenadas().clear();
+        disparosjug1.clear();
+        disparosjug2.clear();
+        datosCoo.clear();
+        datosCooJugadorDos.clear();
+        datosNombreCoo.clear();
+        datosNombreCooJugadorDos.clear();
+
+    }
+
     int pegadosjug1 = 0;
     int pegadosjug2 = 0;
 
@@ -788,40 +867,6 @@ public class ControladorBatalla implements Serializable {
         return pegadosjug2 == cordsOcupadas.size();
     }
 
-//Inicio de almacenar diaparos j2
-    public void dispararJugadorDos(int columna, int fila) {
-        if (turnoJug2) {
-            JsfUtil.addSuccessMessage("Disparo Guardado: " + columna + "." + fila);
-            disparosjug2.add(new Coordenada((byte) columna, (byte) fila));
-            cordsOcupadas = tablerojug1.acumCoordenadas();
-            int num = 0;
-            for (Coordenada coor : cordsOcupadas) {
-                if (coor.getFila() == fila && coor.getColumna() == columna) {
-                    num++;
-                    pegadosjug2++;
-                }
-
-            }
-            if (validarGanadorjug2()) {
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "...Ganaste...", "...Campeón...");
-                PrimeFaces.current().dialog().showMessageDynamic(message);
-            }
-            if (num < 1) {
-                turnoJug1 = true;
-                turnoJug2 = false;
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Fallaste este Turno", "Intenta de nuevo... ");
-                PrimeFaces.current().dialog().showMessageDynamic(message);
-
-            }
-        } else {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información...", "Aún no te toca, Jugador uno no ha perdido, Sigue intentando");
-            PrimeFaces.current().dialog().showMessageDynamic(message);
-//            JsfUtil.addErrorMessage("aun no le toca intente de nuevo en un momento");
-        }
-
-    }
-    //Final de almacenar diaparos
-
     public String mostrarTruno(boolean estado) {
         String dato = "";
         if (estado == true) {
@@ -832,7 +877,29 @@ public class ControladorBatalla implements Serializable {
         return dato;
     }
 
-    //Inicio de pintar disparos
+    //Inicio verificar disparo j2
+    public boolean verificarDisparoJugadorDos(int columna, int fila) {
+        for (Coordenada disparo : disparosjug2) {
+            if (disparo.getFila() == fila && disparo.getColumna() == columna) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //Final  verificar disparo
+
+    //Inicio verificar disparo j1
+    public boolean verificarDisparoJugadorUno(int columna, int fila) {
+        for (Coordenada disparo : disparosjug1) {
+            if (disparo.getFila() == fila && disparo.getColumna() == columna) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //Final  verificar disparo
+
+//Inicio de pintar disparos J1
     public String pintarDisparosJugadorUno(int columna, int fila) {
         for (Coordenada disparo : disparosjug1) {
             for (BarcoPosicionado miBarquito : tablerojug2.listarNodos()) {
@@ -847,18 +914,90 @@ public class ControladorBatalla implements Serializable {
         }
         return "width: 100px; height: 30px";
     }
-    //Final de pintar disparos
+    //Final de pintar disparos J1
 
-    //Inicio verificar disparo j2
-    public boolean verificarDisparoJugadorDos(int columna, int fila) {
-        for (Coordenada disparo : disparosjug2) {
-            if (disparo.getFila() == fila && disparo.getColumna() == columna) {
-                return true;
+    //Inicio de mostrar tocados j1
+    private int contarFragataHundidosJug1 = 0;
+    private int contarSubmarinoHundidosjug1 = 0;
+    private int contarRompeHundidosJug1 = 0;
+
+    public void mostrarTocadosJuUno(int columna, int fila) {
+        for (Coordenada disparo : disparosjug1) {
+            for (BarcoPosicionado miBarquito : tablerojug2.listarNodos()) {
+                if (miBarquito.getCoordenadas() != null) {
+                    if (miBarquito.validarCoordenada(disparo.getColumna(), disparo.getFila())) {
+                        if (disparo.getFila() == fila && disparo.getColumna() == columna) {
+                            if (miBarquito.getTipoBarco().getNombre().compareTo("Fragata") == 0) {
+                                contarFragataHundidosJug1++;
+                                JsfUtil.addSuccessMessage("Has Tocado un Barco Fragata");
+                                if (miBarquito.getTipoBarco().getNroCasillas() == contarFragataHundidosJug1) {
+                                    JsfUtil.addSuccessMessage("Has Hundido una fragata");
+                                    contarFragataHundidosJug1 = 0;
+                                }
+                            } else if (miBarquito.getTipoBarco().getNombre().compareTo("Submarino") == 0) {
+                                contarSubmarinoHundidosjug1++;
+                                JsfUtil.addSuccessMessage("Has Tocado un Barco Submarino");
+                                if (miBarquito.getTipoBarco().getNroCasillas() == contarSubmarinoHundidosjug1) {
+                                    JsfUtil.addSuccessMessage("Has Hundido un Submarino");
+                                    contarSubmarinoHundidosjug1 = 0;
+                                }
+                            } else if (miBarquito.getTipoBarco().getNombre().compareTo("Rompe") == 0) {
+                                contarRompeHundidosJug1++;
+                                JsfUtil.addSuccessMessage("Has Tocado un Barco Rompe");
+                                if (miBarquito.getTipoBarco().getNroCasillas() == contarRompeHundidosJug1) {
+                                    JsfUtil.addSuccessMessage("Has Hundido un Rompe");
+                                    contarRompeHundidosJug1 = 0;
+                                }
+
+                            }
+                        }
+                    }
+                }
             }
         }
-        return false;
     }
-    //Final  verificar disparo
+    //Final de mostrar tocados j1
+
+    //Inicio de mostrar tocados j2
+    private int contarFragataHundidosJug2 = 0;
+    private int contarSubmarinoHundidosjug2 = 0;
+    private int contarRompeHundidosJug2 = 0;
+
+    public void mostrarTocadosJudos(int columna, int fila) {
+        for (Coordenada disparo : disparosjug2) {
+            for (BarcoPosicionado miBarquito : tablerojug1.listarNodos()) {
+                if (miBarquito.getCoordenadas() != null) {
+                    if (miBarquito.validarCoordenada(disparo.getColumna(), disparo.getFila())) {
+                        if (disparo.getFila() == fila && disparo.getColumna() == columna) {
+                            if (miBarquito.getTipoBarco().getNombre().compareTo("Fragata") == 0) {
+                                contarFragataHundidosJug2++;
+                                JsfUtil.addSuccessMessage("Has Tocado un Barco Fragata");
+                                if (miBarquito.getTipoBarco().getNroCasillas() == contarFragataHundidosJug2) {
+                                    JsfUtil.addSuccessMessage("Has Hundido una fragata");
+                                    contarFragataHundidosJug2 = 0;
+                                }
+                            } else if (miBarquito.getTipoBarco().getNombre().compareTo("Submarino") == 0) {
+                                contarSubmarinoHundidosjug2++;
+                                JsfUtil.addSuccessMessage("Has Tocado un Barco Submarino");
+                                if (miBarquito.getTipoBarco().getNroCasillas() == contarSubmarinoHundidosjug2) {
+                                    JsfUtil.addSuccessMessage("Has Hundido un Submarino");
+                                    contarSubmarinoHundidosjug2 = 0;
+                                }
+                            } else if (miBarquito.getTipoBarco().getNombre().compareTo("Rompe") == 0) {
+                                contarRompeHundidosJug2++;
+                                JsfUtil.addSuccessMessage("Has Tocado un Barco Rompe");
+                                if (miBarquito.getTipoBarco().getNroCasillas() == contarRompeHundidosJug2) {
+                                    JsfUtil.addSuccessMessage("Has Hundido un Rompe");
+                                    contarRompeHundidosJug2 = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //Final de mostrar tocados j1
 
     //Inicio de pintar disparos j2
     public String pintarDisparosJugadorDos(int columna, int fila) {
@@ -964,10 +1103,12 @@ public class ControladorBatalla implements Serializable {
         } else if (jugador1.getTipoRol().getNombre().toUpperCase().compareTo(usuarios.toUpperCase()) == 0
                 && jugador1.getTipoRol().getCodigo() == (byte) codigo
                 && jugador1.getPassword().equals(password)) {
+            showMessageInicioDelJuego();
             return "jugador1";
         } else if (jugador2.getTipoRol().getNombre().toUpperCase().compareTo(usuarios.toUpperCase()) == 0
                 && jugador2.getTipoRol().getCodigo() == (byte) codigo
                 && jugador2.getPassword().equals(password)) {
+            showMessageInicioDelJuego();
             return "jugador2";
         }
         JsfUtil.addErrorMessage("Usuario no registrado");
