@@ -294,11 +294,11 @@ public class ControladorBatalla implements Serializable {
         jugador1 = new Usuario("jugador1@hotmail.com", "Colombia12", new Rol((byte) 2020, "JUGADOR1"));
         jugador2 = new Usuario("jugador2@hotmail.com", "Colombia12", new Rol((byte) 1010, "JUGADOR2"));
         try {
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Fragata", (byte) 5, (byte) 1));
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Rompe", (byte) 6, (byte) 1));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Fragata", (byte) 2, (byte) 1));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Rompe", (byte) 3, (byte) 2));
 //            tiposDeBarcos.adicionarNodo(new TipoBarco("Acorazado", (byte) 4, (byte) 1));
 //            tiposDeBarcos.adicionarNodo(new TipoBarco("Destructor", (byte) 1, (byte) 2));
-            tiposDeBarcos.adicionarNodo(new TipoBarco("Submarino", (byte) 7, (byte) 1));
+            tiposDeBarcos.adicionarNodo(new TipoBarco("Submarino", (byte) 4, (byte) 1));
 
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
@@ -432,6 +432,64 @@ public class ControladorBatalla implements Serializable {
     }
     //Final de informacion
 
+    private List<Coordenada> cordsOc = new ArrayList<>();
+
+    public boolean validarCoordenadaJuntaJuUno(int c, int f) {
+        int colJunta = 0;
+        int filaJunta = 0;
+        int colJuntaResta = 0;
+        int filaJuntaResta = 0;
+        colJunta = (c + 1);
+        filaJunta = (f + 1);
+        colJuntaResta = (c - 1);
+        filaJuntaResta = (f - 1);
+        cordsOc = tablerojug1.acumCoordenadas();
+        for (Coordenada cordsOc1 : cordsOc) {
+            if (colJunta == cordsOc1.getColumna() && f == cordsOc1.getFila() || colJuntaResta == cordsOc1.getColumna() && f == cordsOc1.getFila()
+                    || c == cordsOc1.getColumna() && filaJunta == cordsOc1.getFila() || c == cordsOc1.getColumna() && filaJuntaResta == cordsOc1.getFila()
+                    || colJuntaResta == cordsOc1.getColumna() && filaJunta == cordsOc1.getFila()) {
+                return true;
+            }
+            if (f == cordsOc1.getColumna() && colJunta == cordsOc1.getFila() || filaJunta == cordsOc1.getColumna() && c == cordsOc1.getFila()
+                    || f == cordsOc1.getColumna() && colJuntaResta == cordsOc1.getFila() || filaJuntaResta == cordsOc1.getColumna() && c == cordsOc1.getFila()) {
+                return true;
+            }
+            if (colJunta == cordsOc1.getColumna() && filaJunta == cordsOc1.getFila() || colJuntaResta == cordsOc1.getColumna() && filaJuntaResta == cordsOc1.getFila()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<Coordenada> cordsOcjudos = new ArrayList<>();
+
+    public boolean validarCoordenadaJuntaJudos(int c, int f) {
+        int colJunta = 0;
+        int filaJunta = 0;
+        int colJuntaResta = 0;
+        int filaJuntaResta = 0;
+        colJunta = (c + 1);
+        filaJunta = (f + 1);
+        colJuntaResta = (c - 1);
+        filaJuntaResta = (f - 1);
+        cordsOcjudos = tablerojug2.acumCoordenadas();
+        for (Coordenada cordsOc1 : cordsOcjudos) {
+            if (colJunta == cordsOc1.getColumna() && f == cordsOc1.getFila() || colJuntaResta == cordsOc1.getColumna() && f == cordsOc1.getFila()
+                    || c == cordsOc1.getColumna() && filaJunta == cordsOc1.getFila() || c == cordsOc1.getColumna() && filaJuntaResta == cordsOc1.getFila()
+                    || colJuntaResta == cordsOc1.getColumna() && filaJunta == cordsOc1.getFila()) {
+                return true;
+            }
+            if (f == cordsOc1.getColumna() && colJunta == cordsOc1.getFila() || filaJunta == cordsOc1.getColumna() && c == cordsOc1.getFila()
+                    || f == cordsOc1.getColumna() && colJuntaResta == cordsOc1.getFila() || filaJuntaResta == cordsOc1.getColumna() && c == cordsOc1.getFila()) {
+                return true;
+            }
+            if (colJunta == cordsOc1.getColumna() && filaJunta == cordsOc1.getFila() || colJuntaResta == cordsOc1.getColumna() && filaJuntaResta == cordsOc1.getFila()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Inicio de coordenadas 
     public void addCoordenadas() {
         try {
@@ -441,11 +499,15 @@ public class ControladorBatalla implements Serializable {
             } else {
                 if (posicionDeBarco == 0) {
                 } else {
-                    tablerojug1.buscarBarcoSeleccionado(Integer.parseInt(barco), columna, fila, posicionDeBarco, cantidad);
-                    posicionDeBarco = 0;
-                    pintarArbolN();
-                    contarLasCoor();
-                    contarLosNombresDeCoor();
+                    if (validarCoordenadaJuntaJuUno(columna, fila)) {
+                        JsfUtil.addSuccessMessage("Barco cerca indique de nuevo");
+                    } else {
+                        tablerojug1.buscarBarcoSeleccionado(Integer.parseInt(barco), columna, fila, posicionDeBarco, cantidad);
+                        posicionDeBarco = 0;
+                        pintarArbolN();
+                        contarLasCoor();
+                        contarLosNombresDeCoor();
+                    }
                 }
             }
         } catch (BatallaNabalExcepcion ex) {
@@ -461,13 +523,16 @@ public class ControladorBatalla implements Serializable {
             } else {
                 if (posicionDeBarcoJugadorDos == 0) {
                 } else {
-                    tablerojug2.buscarBarcoSeleccionado(Integer.parseInt(barco), columnaJugadorDos, filaJugadorDos, posicionDeBarcoJugadorDos, cantidad);
-                    posicionDeBarcoJugadorDos = 0;
-                    pintarArbolNJugadorDos();
-                    contarLasCoorJugadorDos();
-                    contarLosNombresDeCoorJugadorDos();
+                    if (validarCoordenadaJuntaJudos(columnaJugadorDos, filaJugadorDos)) {
+                        JsfUtil.addSuccessMessage("Barco cerca indique de nuevo");
+                    } else {
+                        tablerojug2.buscarBarcoSeleccionado(Integer.parseInt(barco), columnaJugadorDos, filaJugadorDos, posicionDeBarcoJugadorDos, cantidad);
+                        posicionDeBarcoJugadorDos = 0;
+                        pintarArbolNJugadorDos();
+                        contarLasCoorJugadorDos();
+                        contarLosNombresDeCoorJugadorDos();
+                    }
                 }
-
             }
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
@@ -530,13 +595,26 @@ public class ControladorBatalla implements Serializable {
             tiposDeBarcos.adicionarNodo(tipoBarco);
             tipoBarco = new TipoBarco();
             pintarArbol();
+            cargarBarcos();
             pintarArbolN();
             pintarArbolNJugadorDos();
+
         } catch (BatallaNabalExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
         }
     }
     //Final de guardar barcoBB por administrador
+
+    //Inicio de reinio en guardar
+    private void cargarBarcos() {
+        tablerojug1.setRaiz(null);
+        tablerojug2.setRaiz(null);
+        cargarArbolJugadorUno();
+        cargarArbolJugadorDos();
+        pintarArbolN();
+        pintarArbolNJugadorDos();
+    }
+    //Final de guardar barcos    
 
     //Inicio de metodotos que pintan el arbolBB
     private DefaultDiagramModel model;
@@ -612,6 +690,9 @@ public class ControladorBatalla implements Serializable {
                 case "Rompe":
                     elementHijo.setStyleClass("ui-diagram-rompe");
                     break;
+                case "Rosadito":
+                    elementHijo.setStyleClass("ui-diagram-pink");
+                    break;
                 default:
                     break;
             }
@@ -670,6 +751,9 @@ public class ControladorBatalla implements Serializable {
                     break;
                 case "Rompe":
                     elementHijo.setStyleClass("ui-diagram-rompe");
+                    break;
+                case "Rosadito":
+                    elementHijo.setStyleClass("ui-diagram-pink");
                     break;
                 default:
                     break;
@@ -1056,6 +1140,8 @@ public class ControladorBatalla implements Serializable {
                         return "background-image: url('../imagenes/submarino.png'); background-size: cover;";
                     } else if (miBarquito.getTipoBarco().getNombre().compareTo("Rompe") == 0) {
                         return "background-image: url('../imagenes/rompe.jpg'); background-size: cover;";
+                    } else if (miBarquito.getTipoBarco().getNombre().compareTo("Rosadito") == 0) {
+                        return "background-color: pink;";
                     }
                 }
             }
@@ -1073,6 +1159,8 @@ public class ControladorBatalla implements Serializable {
                         return "background-image: url('../imagenes/submarino.png'); background-size: cover;";
                     } else if (miBarquito.getTipoBarco().getNombre().compareTo("Rompe") == 0) {
                         return "background-image: url('../imagenes/rompe.jpg'); background-size: cover;";
+                    } else if (miBarquito.getTipoBarco().getNombre().compareTo("Rosadito") == 0) {
+                        return "background-color: pink;";
                     }
                 }
             }

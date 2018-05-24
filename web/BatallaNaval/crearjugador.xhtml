@@ -35,11 +35,11 @@
 
             <p:growl id="pnlErroresLogin"/>
 
-            <p:panel id="pnlPrincipal">
+            <p:panel id="pnlPrincipal" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
 
                 <h1 style="background-color: black">BIENVENIDO ADMINISTRADOR!!!</h1>
 
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="2" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
                     <p:outputLabel value="Cantidad de Barcos"/>
                     <p:outputLabel value="#{controladorBatalla.tiposDeBarcos.sumarCantidadBarcos()}"/>
                     <p:outputLabel for="lbIdentifi" value="Nombre de Barco"/>
@@ -49,17 +49,17 @@
                     <p:outputLabel for="outNrBarco" value="Cantidad de Barcos"/>
                     <p:spinner id="outNrBarco" min="1" max="7" value="#{controladorBatalla.tipoBarco.cantidadJuego}"/>
                     <p:commandButton value="Guardar" update="@all" action="#{controladorBatalla.guardarBarco()}" ajax="false"/>
-                    <p:commandButton value="Cancelar" 
-                                     update="@all">
+                    <p:commandButton value="Update" 
+                                     update="@all" ajax="false">
                     </p:commandButton>  
                 </p:panelGrid>
 
                 <p:panelGrid columns="2">
-                    <p:panel header="Arbol Binario de Busqueda">
+                    <p:panel header="Arbol Binario de Busqueda" >
                         <p:diagram value="#{controladorBatalla.model}" style="height:600px; width: 600px" styleClass="ui-widget-content" />
                     </p:panel>
                     <p:panel header="Datos de Barco">
-                        <p:commandButton value="Datos" action="#{controladorBatalla.barcosEnSistema()}"
+                        <p:commandButton value="Update-Datos" action="#{controladorBatalla.barcosEnSistema()}"
                                          update="pnlPrincipal"/> 
                         <p:dataTable value="#{controladorBatalla.informacionDeBarcos}"
                                      var="barcos">

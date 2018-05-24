@@ -1,8 +1,9 @@
 package com.BatallaNavalArboles.validadores;
 
 import com.BatallaNavalArboles.execepciones.BatallaNabalExcepcion;
+import com.BatallaNavalArboles.modelo.Coordenada;
 import com.BatallaNavalArboles.modelo.TipoBarco;
-import com.caracolesdecolores.controlador.util.JsfUtil;
+import java.util.List;
 
 /**
  * @author Santiago Betancur Villegas <santiago-betancur at hotmail.com>
@@ -48,4 +49,6 @@ public class BatallaValidador {
     public static void coordenadaRepetida() throws BatallaNabalExcepcion {
         throw new BatallaNabalExcepcion("Severifica si hay coordenada repetida, si no se adiona, indique de nuevo");
     }
+    
+
 }

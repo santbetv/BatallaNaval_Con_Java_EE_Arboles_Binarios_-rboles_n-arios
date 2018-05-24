@@ -101,7 +101,6 @@ public class ArbolN {
         return barcos;
     }
 
-    //Final de listar nodos
     public List<Coordenada> acumCoordenadas() {
         List<Coordenada> barcos = new ArrayList<>();
         if (raiz != null) {
@@ -225,6 +224,7 @@ public class ArbolN {
         }
         return retornoDePosImagen;
     }
+
 
     public void buscarBarcoSeleccionado(int barco, byte c, byte f, int posicion, int cantidad) throws BatallaNabalExcepcion {
         buscarBarcoSeleccionado(barco, raiz, c, f, posicion, cantidad);

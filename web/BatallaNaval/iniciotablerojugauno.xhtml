@@ -30,6 +30,10 @@
                 background-size: cover;
             }
 
+            .ui-diagram-pink{
+                background: pink;
+            }
+
             .ui-diagram-element {
                 width:10em; 
                 height:3em;
@@ -53,7 +57,6 @@
             <p:growl id="pnlErroresLogin"/>
 
             <p:panel id="pnlPrincipal" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
-
 
                 <h1 onmouseover="style.color = 'white'" onmouseout="style.color = 'red'" style="background: black">!!!BIENVENIDO JUGADOR-1!!!</h1>
 
@@ -91,28 +94,29 @@
 
                 <p:separator />
 
+
                 <p:panel id="pnlDiagram" header="Arbol N ---> Barcos Disponible : #{controladorBatalla.tiposDeBarcos.sumarCantidadBarcos()}" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%; width: 600px;">
                     <p:diagram id="diagrama" value="#{controladorBatalla.model2}" style="height:400px; background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;" styleClass="ui-widget-content"/>
                 </p:panel>
 
                 <p:separator />
 
-                <p:panel header="Datos de Barco " id="pnlDatosDeBar" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
+                <p:panel header="Datos de Barco #{controladorBatalla.barcosEnSistema()}" id="pnlDatosDeBar" style="background-color: rgba(0,0,0,.0); margin: 0 auto; text-align:center; border-radius: 1%;">
                     <p:dataTable value="#{controladorBatalla.informacionDeBarcos}"
                                  var="barcos" class="fondo">
-                        <p:column class="fondo" style="background-color: red; color: white">
+                        <p:column  style="color: red">
                             <f:facet name="header">
                                 <p:outputLabel value="Nombre"/>
                             </f:facet>
                             <p:outputLabel value="#{barcos.nombre}" style="color: red"/>
                         </p:column>
-                        <p:column class="fondo" style="background-color: green; color: white">
+                        <p:column style="color: green">
                             <f:facet name="header">
                                 <p:outputLabel value="Cantidad de Barcos"/>
                             </f:facet>
                             <p:outputLabel value="#{barcos.cantidadJuego}" style="color: green"/>
                         </p:column>
-                        <p:column class="fondo" style="background-color: blue; color: white">
+                        <p:column style="color: blue">
                             <f:facet name="header">
                                 <p:outputLabel value="# de casillas"/>
                             </f:facet>
