@@ -21,9 +21,15 @@ Colombia12
 
 ####
 Login-2
+<li>
 JUGADOR2
+  </li>
+<li>
 1010
+  </li>
+<li>
 Colombia12
+</li>
 
 ### Lo verás desplegado así.
 
