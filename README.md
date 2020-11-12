@@ -11,9 +11,14 @@ Juego para dos personas de Batalla Naval
 Login-1
 <li>
 JUGADOR1
+  </li>
+<li>
 2020
+  </li>
+<li>
 Colombia12
 </li>
+
 ####
 Login-2
 JUGADOR2
