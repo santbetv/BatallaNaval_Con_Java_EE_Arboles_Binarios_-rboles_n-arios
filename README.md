@@ -2,7 +2,7 @@
 
 ## Ingresa al juego desde acá
 
-http://18.222.77.127:8080/BatallaNavalArboles/
+https://www.sbvdeveloper.tech/BatallaNavalArboles/
 
 ### Informate
 Juego para dos personas de Batalla Naval
